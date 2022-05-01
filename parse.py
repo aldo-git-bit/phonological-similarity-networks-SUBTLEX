@@ -1,5 +1,7 @@
 from words import *
 
+# TODO: Expand columns to have data be nicely formtted when opening the excel file
+
 
 def create_file():
     subtlex = pd.read_excel('SUBTLEX-US frequency list with PoS information.xlsx')

@@ -6,8 +6,9 @@ def main():
     words = []
     create_file()
     add_words_to_list(words)
-    print(words[4].word, words[4].POS, words[4].FREQ)
-    print(words[11].word, words[11].POS, words[11].FREQ)
+    print(words[0])
+    print(words[1])
+    print(words[len(words) - 1])
 
 
 if __name__ == "__main__":
