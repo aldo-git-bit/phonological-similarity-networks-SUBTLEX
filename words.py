@@ -8,10 +8,6 @@ class Words:
         self.FREQ = FREQ
 
 
-class WordList:
-    def __init__(self, wordlist):
-        self.wordlist = wordlist
-
 
 def add_words_to_list(words):
     df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
