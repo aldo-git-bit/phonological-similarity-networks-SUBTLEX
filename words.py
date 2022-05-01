@@ -1,5 +1,5 @@
 import pandas as pd
-
+import eng_to_ipa as ipa
 
 class Words:
     def __init__(self, word, POS, FREQ):
