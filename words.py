@@ -57,7 +57,7 @@ def words_without_pos(words):
         if str(words[i].POS) == 'nan':
             f.write(f'{words[i].word:<100} \t {words[i].FREQ} \n')
 
-
+# currently ignoring nan POS
 def total_pos(words):
     total = 0
     for i in range(len(words)):
@@ -65,7 +65,7 @@ def total_pos(words):
             total += 1
     print(f"{total} /74286 POS. Averaging {total / 74286}")
 
-
+# currently ignoring nan POS
 def total_pos_reading_from_file():
     total = 0
     df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
