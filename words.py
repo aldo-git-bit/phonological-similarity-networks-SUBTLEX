@@ -100,8 +100,13 @@ def frequency_distribution():
         POS = str(df['All_PoS_SUBTLEX'][i])  # As of now we are treating X.Y separately compared to Y.X
         if POS != 'nan': # remove if statement if we want nan included in this frequency distribution
             frequency[POS] = frequency.get(POS, 0) + 1
-    pprint.pprint(frequency)
-    pretty_dict_str = pprint.pformat(frequency)
+    sort_frequency = sorted(frequency.items(), key=lambda x: x[1], reverse=True)
     f = open("frequency-distribution.txt", "w+")
-    f.write(pretty_dict_str)
+    for i in sort_frequency:
+        print(f'{i[0]:<100} {i[1]}')
+        f.write(f'{i[0]:<100} \t {i[1]} \n')
+    # pprint.pprint(frequency)
+    # pretty_dict_str = pprint.pformat(frequency)
+
+    # f.write(pretty_dict_str)
     f.close()
