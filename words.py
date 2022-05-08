@@ -33,15 +33,26 @@ def add_words_to_list(words):
         POS = str(df['All_PoS_SUBTLEX'][i]).split(".")
         FREQ = str(df['All_freqs_SUBTLEX'][i]).split(".")
         if len(POS) == 1:
-            if POS[0] == "nan" and FREQ[0] == "nan":
-                # words.append(Words(word, "N/A", "N/A")) # If we want to keep it as N/A
-                words.append(Words(word, "N/A", str(df['FREQcount'][i])))  # If we want to use FREQcount
-            elif POS[0] == "nan" and FREQ[0] != "nan":
-                words.append(Words(word, "N/A", FREQ[0]))
-            elif POS[0] != "nan" and FREQ[0] == "nan":
+            # if POS[0] == "nan" and FREQ[0] == "nan":
+            # words.append(Words(word, "N/A", "N/A")) # If we want to keep it as N/A
+            #     words.append(Words(word, "N/A", str(df['FREQcount'][i])))  # If we want to use FREQcount
+            # elif POS[0] == "nan" and FREQ[0] != "nan":
+            #     words.append(Words(word, "N/A", FREQ[0]))
+            # elif POS[0] != "nan" and FREQ[0] == "nan":
+            #     words.append(Words(word, POS[0], str(df['FREQcount'][i])))
+            # else:
+            if POS[0] == "nan":
                 words.append(Words(word, POS[0], str(df['FREQcount'][i])))
             else:
                 words.append(Words(word, POS[0], FREQ[0]))
         else:
             for j in range(len(POS)):
                 words.append(Words(word, POS[j], FREQ[j]))
+
+
+def words_without_pos(words):
+    f = open("words-without-pos.txt", "w+")
+    f.write(f'{"WORD":<100} \t FREQ \n')
+    for i in range(0, len(words)):
+        if str(words[i].POS) == 'nan':
+            f.write(f'{words[i].word:<100} \t {words[i].FREQ} \n')

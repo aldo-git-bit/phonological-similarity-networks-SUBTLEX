@@ -6,8 +6,7 @@ def main():
     words = []
     create_file()
     add_words_to_list(words)
-    for i in range(400, 500):
-        print(f"{words[i].word} {words[i].POS} {words[i].FREQ}")
+    words_without_pos(words)
 
 
 if __name__ == "__main__":
