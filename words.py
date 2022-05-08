@@ -92,13 +92,14 @@ def total_pos_reading_from_file():
     print(f"{total} / 74286 POS. Averaging {total / 74286}")
 
 
-# Includes nan as separate entity
+# Does not include nan values
 def frequency_distribution():
     frequency = {}
     df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
     for i in range(len(df['Word'])):
         POS = str(df['All_PoS_SUBTLEX'][i])  # As of now we are treating X.Y separately compared to Y.X
-        frequency[POS] = frequency.get(POS, 0) + 1
+        if POS != 'nan': # remove if statement if we want nan included in this frequency distribution
+            frequency[POS] = frequency.get(POS, 0) + 1
     pprint.pprint(frequency)
     pretty_dict_str = pprint.pformat(frequency)
     f = open("frequency-distribution.txt", "w+")
