@@ -1,5 +1,6 @@
 import pandas as pd
-import eng_to_ipa as ipa
+import matplotlib.pyplot as plt
+import pprint
 
 
 class Words:
@@ -57,6 +58,7 @@ def words_without_pos(words):
         if str(words[i].POS) == 'nan':
             f.write(f'{words[i].word:<100} \t {words[i].FREQ} \n')
 
+
 # currently ignoring nan POS
 def total_pos(words):
     total = 0
@@ -64,6 +66,7 @@ def total_pos(words):
         if str(words[i].POS) != 'nan':
             total += 1
     print(f"{total} /74286 POS. Averaging {total / 74286}")
+
 
 # currently ignoring nan POS
 def total_pos_reading_from_file():
@@ -86,3 +89,16 @@ def total_pos_reading_from_file():
             total += len(POS)
     print("Using file reading... ")
     print(f"{total} /74286 POS. Averaging {total / 74286}")
+
+
+# Includes nan as seperate entity
+def frequency_distribution():
+    frequency = {}
+    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
+    for i in range(len(df['Word'])):
+        POS = str(df['All_PoS_SUBTLEX'][i])  # As of now we are treating X.Y separately compared to Y.X
+        frequency[POS] = frequency.get(POS, 0) + 1
+    pprint.pprint(frequency)
+    pretty_dict_str = pprint.pformat(frequency)
+    f = open("frequency-distribution.txt", "w+")
+    f.write(pretty_dict_str)

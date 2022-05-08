@@ -9,6 +9,7 @@ def main():
     words_without_pos(words)
     total_pos(words)
     total_pos_reading_from_file()
+    frequency_distribution()
 
 
 if __name__ == "__main__":
