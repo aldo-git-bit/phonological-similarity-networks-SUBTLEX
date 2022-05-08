@@ -56,3 +56,33 @@ def words_without_pos(words):
     for i in range(0, len(words)):
         if str(words[i].POS) == 'nan':
             f.write(f'{words[i].word:<100} \t {words[i].FREQ} \n')
+
+
+def total_pos(words):
+    total = 0
+    for i in range(len(words)):
+        if str(words[i].POS) != 'nan':
+            total += 1
+    print(f"{total} /74286 POS. Averaging {total / 74286}")
+
+
+def total_pos_reading_from_file():
+    total = 0
+    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
+    for i in range(len(df['Word'])):
+        POS = str(df['All_PoS_SUBTLEX'][i]).split(".")
+        if len(POS) == 1:
+            # if POS[0] == "nan" and FREQ[0] == "nan":
+            # words.append(Words(word, "N/A", "N/A")) # If we want to keep it as N/A
+            #     words.append(Words(word, "N/A", str(df['FREQcount'][i])))  # If we want to use FREQcount
+            # elif POS[0] == "nan" and FREQ[0] != "nan":
+            #     words.append(Words(word, "N/A", FREQ[0]))
+            # elif POS[0] != "nan" and FREQ[0] == "nan":
+            #     words.append(Words(word, POS[0], str(df['FREQcount'][i])))
+            # else:
+            if POS[0] != "nan":
+                total += len(POS)
+        else:
+            total += len(POS)
+    print("Using file reading... ")
+    print(f"{total} /74286 POS. Averaging {total / 74286}")
