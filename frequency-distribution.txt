@@ -400,3 +400,5 @@ Letter.Number.Preposition                                                       
 Pronoun.Interjection                                                                                 	 1 
 Number.Noun.Verb.Name                                                                                	 1 
 Noun.Number.Verb                                                                                     	 1 
+
+The average POS per word is: 1.3846350590959267

@@ -67,13 +67,16 @@ def total_pos(words):
         if str(words[i].POS) != 'nan':
             total += 1
     print(f"{total} / 74286 POS. Averaging {total / 74286}")
+    return total / 74286
 
 
 # currently ignoring nan POS
 def total_pos_reading_from_file():
     total = 0
+    num_words = 0
     df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
     for i in range(len(df['Word'])):
+        num_words += 1
         POS = str(df['All_PoS_SUBTLEX'][i]).split(".")
         if len(POS) == 1:
             # if POS[0] == "nan" and FREQ[0] == "nan":
@@ -89,11 +92,11 @@ def total_pos_reading_from_file():
         else:
             total += len(POS)
     print("Using file reading... ")
-    print(f"{total} / 74286 POS. Averaging {total / 74286}")
+    print(f"{total} / 74286 POS. Averaging {total / num_words}")
 
 
 # Does not include nan values
-def frequency_distribution():
+def frequency_distribution(freq_words):
     frequency = {}
     df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
     for i in range(len(df['Word'])):
@@ -103,8 +106,9 @@ def frequency_distribution():
     sort_frequency = sorted(frequency.items(), key=lambda x: x[1], reverse=True)
     f = open("frequency-distribution.txt", "w+")
     for i in sort_frequency:
-        print(f'{i[0]:<100} {i[1]}')
+        # print(f'{i[0]:<100} {i[1]}')
         f.write(f'{i[0]:<100} \t {i[1]} \n')
+    f.write(f'\nThe average POS per word is: {freq_words}')
     # pprint.pprint(frequency)
     # pretty_dict_str = pprint.pformat(frequency)
 
