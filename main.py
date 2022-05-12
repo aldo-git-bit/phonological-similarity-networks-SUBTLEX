@@ -6,8 +6,8 @@ def main():
     words_pos_seperated = []
     create_file()
     add_words_to_list(words_pos_seperated)
-    words_without_pos(words_pos_seperated)
-    freq = total_pos(words_pos_seperated)
+    nan = words_without_pos(words_pos_seperated)
+    freq = total_pos(words_pos_seperated, nan)
     print(freq)
     total_pos_reading_from_file()
     frequency_distribution(freq)

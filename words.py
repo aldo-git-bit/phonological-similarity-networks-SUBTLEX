@@ -52,22 +52,25 @@ def add_words_to_list(words):
 
 
 def words_without_pos(words):
+    total = 0
     f = open("words-without-pos.txt", "w+")
     f.write(f'{"WORD":<100} \t FREQ \n')
     for i in range(0, len(words)):
         if str(words[i].POS) == 'nan':
             f.write(f'{words[i].word:<100} \t {words[i].FREQ} \n')
+            total += 1
     f.close()
+    return total
 
 
 # currently ignoring nan POS
-def total_pos(words):
+def total_pos(words, total_nan):
     total = 0
     for i in range(len(words)):
         if str(words[i].POS) != 'nan':
             total += 1
-    print(f"{total} / 74095 POS. Averaging {(total / (74286 - 191))}")
-    return total / (74286 - 191)
+    print(f"{total} / 74095 POS. Averaging {(total / (74286 - total_nan))}")
+    return total / (74286 - total_nan)
 
 
 # currently ignoring nan POS
@@ -102,7 +105,7 @@ def frequency_distribution(freq_words):
     df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
     for i in range(len(df['Word'])):
         POS = str(df['All_PoS_SUBTLEX'][i])  # As of now we are treating X.Y separately compared to Y.X
-        if POS != 'nan': # remove if statement if we want nan included in this frequency distribution
+        if POS != 'nan':  # remove if statement if we want nan included in this frequency distribution
             frequency[POS] = frequency.get(POS, 0) + 1
     sort_frequency = sorted(frequency.items(), key=lambda x: x[1], reverse=True)
     f = open("frequency-distribution.txt", "w+")
