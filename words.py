@@ -1,13 +1,12 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import pprint
+import eng_to_ipa as ipa
+import subprocess
 
 
 class Words:
-    def __init__(self, word, POS, FREQ):
+    def __init__(self, word, IPA):
         self.word = word
-        self.POS = POS
-        self.FREQ = FREQ
+        self.IPA = IPA
 
 
 # TODO: Think about what we want to do for words with N/A ratings. Currently displayed as nan but changed to N/A
@@ -19,7 +18,7 @@ we will be left without a Part of Speech, and we are unsure what the relationshi
 # TODO: Add a clause to automatically adjust the POS if needed for each word
 """ 
 We'll have to check with an if statement for the word if we want to automate this. 
-e.g if word == "horsefly" -> words.append(word, "Noun", FREQ[0]
+e.g if word == "horsefly" -> words.append(word, "Noun", FREQ[0])
 
 """
 
@@ -29,26 +28,18 @@ e.g if word == "horsefly" -> words.append(word, "Noun", FREQ[0]
 
 def add_words_to_list(words):
     df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
+    j = 0
     for i in range(len(df['Word'])):
+        if j == 500:
+            break
         word = str(df['Word'][i])
-        POS = str(df['All_PoS_SUBTLEX'][i]).split(".")
-        FREQ = str(df['All_freqs_SUBTLEX'][i]).split(".")
-        if len(POS) == 1:
-            # if POS[0] == "nan" and FREQ[0] == "nan":
-            # words.append(Words(word, "N/A", "N/A")) # If we want to keep it as N/A
-            #     words.append(Words(word, "N/A", str(df['FREQcount'][i])))  # If we want to use FREQcount
-            # elif POS[0] == "nan" and FREQ[0] != "nan":
-            #     words.append(Words(word, "N/A", FREQ[0]))
-            # elif POS[0] != "nan" and FREQ[0] == "nan":
-            #     words.append(Words(word, POS[0], str(df['FREQcount'][i])))
-            # else:
-            if POS[0] == "nan":
-                words.append(Words(word, POS[0], str(df['FREQcount'][i])))
-            else:
-                words.append(Words(word, POS[0], FREQ[0]))
-        else:
-            for j in range(len(POS)):
-                words.append(Words(word, POS[j], FREQ[j]))
+        IPA = str(ipa.convert(word))
+
+        if IPA[len(IPA) - 1] == "*":
+            IPA = subprocess.run(['bash', 'ipa_translator.sh', word], capture_output=True).stdout.decode()
+
+        words.append(Words(word, IPA))
+        j += 1
 
 
 def words_without_pos(words):
