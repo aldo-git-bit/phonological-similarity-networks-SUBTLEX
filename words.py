@@ -39,7 +39,9 @@ def add_words_to_list(words):
             subprocess.run(['bash', 'ipa_translator.sh', word])
             with open('ipa_translation.txt') as f:
                 lines = f.readlines()
-                IPA = lines[0]
+                IPA = lines[0][1:].replace(" ", "")
+                IPA = IPA.replace(">", " ")
+                IPA = IPA.strip()
 
         words.append(Words(word, IPA))
         j += 1
