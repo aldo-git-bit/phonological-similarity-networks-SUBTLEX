@@ -34,9 +34,12 @@ def add_words_to_list(words):
             break
         word = str(df['Word'][i])
         IPA = str(ipa.convert(word))
-
         if IPA[len(IPA) - 1] == "*":
-            IPA = subprocess.run(['bash', 'ipa_translator.sh', word], capture_output=True).stdout.decode()
+            print(word)
+            subprocess.run(['bash', 'ipa_translator.sh', word])
+            with open('ipa_translation.txt') as f:
+                lines = f.readlines()
+                IPA = lines[0]
 
         words.append(Words(word, IPA))
         j += 1

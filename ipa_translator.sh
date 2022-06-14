@@ -22,3 +22,6 @@ echo $onmt_word > temp_word.txt
 #translate the word in temp_word.txt using openNMT with the model created from a set of 32k words
 results=$(onmt_translate -gpu -1 -model eng_ipa_model1_steps/eng_ipa_model1_step_100000.pt -src temp_word.txt -replace_unk -verbose -output ipa_translation.txt)
 #print only the results we care about, i.e. the translated IPA
+echo "The provided IPA translation is:"
+echo $results | egrep -o '< .* >'
+
