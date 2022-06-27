@@ -1,7 +1,7 @@
 import pandas as pd
 import eng_to_ipa as ipa
 import subprocess
-
+import openpyxl
 
 class Words:
     def __init__(self, WORD, IPA, IPA_model):
@@ -28,11 +28,13 @@ e.g if word == "horsefly" -> words.append(word, "Noun", FREQ[0])
 # TODO: IPA Conversion in a timely manner, and what to do if IPA conversion doesn't exist
 
 def add_words_to_list(words):
-    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
     j = 0
+    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
+
     for i in range(len(df['Word'])):
-        if j == 1000:
+        if j == 10:
             break
+        
         WORD = str(df['Word'][i]).strip()
         IPA = str(ipa.convert(WORD)).strip()
         IPA = IPA.replace("ˈ", "")
