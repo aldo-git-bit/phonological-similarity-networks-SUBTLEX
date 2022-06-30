@@ -4,10 +4,9 @@ import subprocess
 import openpyxl
 
 class Words:
-    def __init__(self, WORD, IPA, IPA_model):
+    def __init__(self, WORD, IPA):
         self.WORD = WORD
         self.IPA = IPA
-        self.IPA_model = IPA_model
 
 
 # TODO: Think about what we want to do for words with N/A ratings. Currently displayed as nan but changed to N/A
@@ -32,22 +31,21 @@ def add_words_to_list(words):
     df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
 
     for i in range(len(df['Word'])):
-        if j == 10:
+        if j == 1000:
             break
         
         WORD = str(df['Word'][i]).strip()
         IPA = str(ipa.convert(WORD)).strip()
         IPA = IPA.replace("ˈ", "")
         IPA = IPA.replace("ˌ", "")
-
-
-        IPA_model = str(subprocess.run(['bash', 'ipa_translator.sh', WORD]))
-        with open('ipa_translation.txt') as f:
-            lines = f.readlines()
-            IPA_model = lines[0][1:].replace(" ", "")
-            IPA_model = IPA_model.replace(">", " ")
-            IPA_model = IPA_model.strip()
-            IPA_model = IPA_model.strip("\n")
+        if IPA[len(IPA) - 1] == "*":
+            IPA = str(subprocess.run(['bash', 'ipa_translator.sh', WORD]))
+            with open('ipa_translation.txt') as f:
+                lines = f.readlines()
+                IPA = lines[0][1:].replace(" ", "")
+                IPA = IPA.replace(">", " ")
+                IPA = IPA.strip()
+                IPA = IPA.strip("\n")
             
        #  if IPA[len(IPA) - 1] == "*":
            #  print(word)
@@ -58,7 +56,7 @@ def add_words_to_list(words):
         #     IPA = IPA.replace(">", " ")
         #     IPA = IPA.strip()
 
-        words.append(Words(WORD, IPA, IPA_model))
+        words.append(Words(WORD, IPA))
         j += 1
 
 
