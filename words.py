@@ -4,27 +4,12 @@ import subprocess
 import openpyxl
 
 class Words:
-    def __init__(self, WORD, IPA):
+    def __init__(self, WORD, IPA, IPA_LIST):
         self.WORD = WORD
         self.IPA = IPA
+        self.IPA_LIST = IPA_LIST
 
 
-# TODO: Think about what we want to do for words with N/A ratings. Currently displayed as nan but changed to N/A
-"""
-For words without values in the "All_freqs_SUBTLEX" field, we could grab the number from FREQcount as well, but 
-we will be left without a Part of Speech, and we are unsure what the relationship between count and POS would be 
-"""
-
-# TODO: Add a clause to automatically adjust the POS if needed for each word
-""" 
-We'll have to check with an if statement for the word if we want to automate this. 
-e.g if word == "horsefly" -> words.append(word, "Noun", FREQ[0])
-
-"""
-
-
-# TODO: Check if we need to change the class to append the POS to the word
-# TODO: IPA Conversion in a timely manner, and what to do if IPA conversion doesn't exist
 
 def add_words_to_list(words):
     j = 0
@@ -56,7 +41,7 @@ def add_words_to_list(words):
         #     IPA = IPA.replace(">", " ")
         #     IPA = IPA.strip()
 
-        words.append(Words(WORD, IPA))
+        words.append(Words(WORD, IPA, list(IPA)))
         j += 1
 
 

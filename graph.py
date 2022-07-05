@@ -8,31 +8,50 @@ def create_adjanceylist(words):
     f = open("words.adjlist", "w+")
     g = open("IPA.adjlist", "w+")
     h = open("List-output.txt", "w+")
-
+    two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
+    vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
     
     for i in range(0, len(words)):
-        temp_array_word1 = []
         word_1 = words[i].IPA_LIST
+        temp_array_word1 = []
+        temp_array_word1.append(word_1[0])
         f.write(f"{words[i].WORD} ")
         g.write(f"{words[i].IPA} ")
 
-        for k in range(0, len(word_1)):
+        for k in range(1, len(word_1)):
             temp_array_word1.append(word_1[k])
 
-            if word_1[k-1] + word_1[k] == "oʊ":
+            if (word_1[k-1] + word_1[k] == "ər") and (k != len(word_1) - 1) and (word_1[k+1] not in vowels):
+                    print(f"{words[i].WORD}...... {word_1}.....{word_1[k+1]}")
+                    temp_array_word1.pop()
+                    temp_array_word1.pop()
+                    temp_array_word1.append(word_1[k-1] + word_1[k])
+
+
+            elif (word_1[k-1] + word_1[k] in two_character_phonemes):
                 temp_array_word1.pop()
                 temp_array_word1.pop()
                 temp_array_word1.append(word_1[k-1] + word_1[k])
+                
+                
             
         h.write(f"{temp_array_word1}")
         for j in range(0, len(words)):
             if i != j:
-                temp_array_word2 = []
                 word_2 = words[j].IPA_LIST
-                for k in range(0, len(word_2)):
+                temp_array_word2 = []
+                temp_array_word2.append(word_2[0])
+               
+                for k in range(1, len(word_2)):
                     temp_array_word2.append(word_2[k])
 
-                    if word_2[k-1] + word_2[k] == "oʊ":
+                    if (word_2[k-1] + word_2[k] == "ər") and (k != len(word_2) - 1) and (word_2[k+1] not in vowels):
+                            temp_array_word2.pop()
+                            temp_array_word2.pop()
+                            temp_array_word2.append(word_2[k-1] + word_2[k])
+
+
+                    elif (word_2[k-1] + word_2[k] in two_character_phonemes):
                         temp_array_word2.pop()
                         temp_array_word2.pop()
                         temp_array_word2.append(word_2[k-1] + word_2[k])
