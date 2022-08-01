@@ -12,12 +12,9 @@ class Words:
 
 
 def add_words_to_list(words):
-    j = 0
     df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
 
     for i in range(len(df['Word'])):
-        if j == 1000:
-            break
         
         WORD = str(df['Word'][i]).strip()
         IPA = str(ipa.convert(WORD)).strip()
@@ -42,7 +39,6 @@ def add_words_to_list(words):
         #     IPA = IPA.strip()
 
         words.append(Words(WORD, IPA, list(IPA)))
-        j += 1
 
 
 def words_without_pos(words):

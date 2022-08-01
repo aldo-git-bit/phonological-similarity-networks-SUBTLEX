@@ -1,6 +1,7 @@
 from parse import *
 from words import *
 from graph import *
+from smallworlds import *
 
 import eng_to_ipa as ipa
 import subprocess
@@ -13,12 +14,12 @@ def main():
     # sed = 0
     # no_ipa = 0
 
-    words_pos_separated = []
-
+    # words_pos_separated = []
+    random_sample()
     # print("1")
-    create_file()
+    # create_file()
     # print("2")
-    add_words_to_list(words_pos_separated)
+    # add_words_to_list(words_pos_separated)
     # # nan = words_without_pos(words_pos_separated)
     # # freq = total_pos(words_pos_separated, nan)
     # # print(freq)
@@ -26,8 +27,8 @@ def main():
     # # frequency_distribution(freq)
     # print("3")
     # supdate_file(words_pos_separated)
-    create_adjanceylist(words_pos_separated)
-    create_graph()
+    # create_adjanceylist(words_pos_separated)
+    # create_graph()
     # subprocess.run('bash ipa_translator.sh china', shell=True, capture_output=True, text=True)
 
 if __name__ == "__main__":
