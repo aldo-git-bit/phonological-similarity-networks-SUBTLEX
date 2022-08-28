@@ -10,13 +10,18 @@ class Words:
         self.IPA_LIST = IPA_LIST
 
 
+def add_words_to_list_from_file(words):
+    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+    for i in range(len(df['Word'])):
+        WORD = str(df['Word'][i]).strip()
+        IPA = str(df['IPA'][i]).strip()
+        IPA_LIST = str(df['IPA-List'][i]).strip().split()
+        words.append(Words(WORD, IPA, list(IPA)))
+
 
 def add_words_to_list(words):
-    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
-    j = 0
+    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
     for i in range(len(df['Word'])):
-        if j == 20:
-            break
         WORD = str(df['Word'][i]).strip()
         IPA = str(ipa.convert(WORD)).strip()
         IPA = IPA.replace("ˈ", "")
@@ -40,7 +45,7 @@ def add_words_to_list(words):
         #     IPA = IPA.strip()
 
         words.append(Words(WORD, IPA, list(IPA)))
-        j += 1
+
 
 def words_without_pos(words):
     total = 0
@@ -68,7 +73,7 @@ def total_pos(words, total_nan):
 def total_pos_reading_from_file():
     total = 0
     num_words = 0
-    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
+    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
     for i in range(len(df['Word'])):
         POS = str(df['All_PoS_SUBTLEX'][i]).split(".")
         if len(POS) == 1:
@@ -93,7 +98,7 @@ def total_pos_reading_from_file():
 # Does not include nan values
 def frequency_distribution(freq_words):
     frequency = {}
-    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
+    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
     for i in range(len(df['Word'])):
         POS = str(df['All_PoS_SUBTLEX'][i])  # As of now we are treating X.Y separately compared to Y.X
         if POS != 'nan':  # remove if statement if we want nan included in this frequency distribution

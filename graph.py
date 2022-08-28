@@ -8,7 +8,6 @@ nlp = spacy.load('en_core_web_sm', disable=['parser','ner'])
 def create_adjanceylist(words):
     f = open("words.adjlist", "w+")
     g = open("IPA.adjlist", "w+")
-    h = open("List-output.txt", "w+")
     two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
     vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
     irregular_words = {
