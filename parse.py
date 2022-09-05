@@ -1,5 +1,8 @@
 from words import *
+import globals 
 
+def print_global():
+    print(len(globals.subtlex_dataset))
 
 
 def create_file():

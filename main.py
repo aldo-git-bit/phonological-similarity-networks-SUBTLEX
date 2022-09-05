@@ -2,31 +2,32 @@ from parse import *
 from words import *
 from graph import *
 from smallworlds import *
-
+import globals
 import eng_to_ipa as ipa
 import subprocess
 import jellyfish
+import concurrent.futures
 
 
-def main():
+# def main():
     # similar = 0
     # sed_ignoring_zerocase = 0
     # sed = 0
     # no_ipa = 0
-
-    subtlex_dataset = []
-    lemmas = []
+    # subtlex_dataset
+    # subtlex_dataset = []
+    # lemmas = []
     # random_sample()
     # print("1")
     # create_file() 
     # print("2")
-    add_words_to_list_from_file(subtlex_dataset)
-    number_of_lemmas(subtlex_dataset, lemmas)
+    # add_words_to_list_from_file(subtlex_dataset)
+    # number_of_lemmas(subtlex_dataset, lemmas)
+    # print_global()
+    # print(len(lemmas))
 
-    print(len(lemmas))
-
-    for i in range(0, 500):
-        print(lemmas[i])
+    # for i in range(0, 500):
+    #     print(lemmas[i])
     # update_ipa(subtlex_dataset)
     # print(len(subtlex_dataset))
     # # nan = words_without_pos(subtlex_dataset)
@@ -41,4 +42,16 @@ def main():
         
 
 if __name__ == "__main__":
-    main()
+    f = open("words.adjlist", "w+")
+    globals.initialize()
+    update_ipa(globals.subtlex_dataset)
+    print_global()
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = executor.map(create_adjanceylist, globals.subtlex_dataset)
+    
+    for result in results:
+        f.write(result)
+        f.write("\n")
+
+
+    f.close()
