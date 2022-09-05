@@ -15,11 +15,19 @@ def main():
     # no_ipa = 0
 
     subtlex_dataset = []
+    lemmas = []
     # random_sample()
     # print("1")
-    create_file()
+    # create_file() 
     # print("2")
-    add_words_to_list(subtlex_dataset)
+    add_words_to_list_from_file(subtlex_dataset)
+    number_of_lemmas(subtlex_dataset, lemmas)
+
+    print(len(lemmas))
+
+    for i in range(0, 500):
+        print(lemmas[i])
+    # update_ipa(subtlex_dataset)
     # print(len(subtlex_dataset))
     # # nan = words_without_pos(subtlex_dataset)
     # # freq = total_pos(subtlex_dataset, nan)
@@ -27,9 +35,10 @@ def main():
     # # total_pos_reading_from_file()
     # # frequency_distribution(freq)
     # print("3")
-    update_file(subtlex_dataset)
+    # update_file(subtlex_dataset)
     # create_adjanceylist(subtlex_dataset)
     # create_graph()
+        
 
 if __name__ == "__main__":
     main()
