@@ -447,7 +447,7 @@ def number_of_lemmas(words, blank_array):
 
 
 def create_adjanceylist(words):
-    # f = open("words.adjlist", "w+")
+    f = open("words.adjlist", "w+")
     # g = open("IPA.adjlist", "w+")
     two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
     vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
@@ -868,44 +868,44 @@ def create_adjanceylist(words):
         "written":["write","wrote"]
 
     }
-    return_string = ""
-    return_string = return_string + words.WORD + " "
-    # for i in range(0, len(words)):
-    word_1 = words.IPA_LIST
-    word_1_nlp = nlp(words.WORD)
-    for token in word_1_nlp:
-        word_1_lemma = str(token.lemma_).strip()
-    # f.write(f"{words[i].WORD} ")
-    # g.write(f"{words[i].IPA} ")
-    # print(words.WORD)     
+    # return_string = ""
+    # return_string = return_string + words.WORD + " "
+    for i in range(0, len(words)):
+        word_1 = words[i].IPA_LIST
+        word_1_nlp = nlp(words[i].WORD)
+        for token in word_1_nlp:
+            word_1_lemma = str(token.lemma_).strip()
+            f.write(f"{words[i].WORD} ")
+        # g.write(f"{words[i].IPA} ")
+        # print(words.WORD)     
         
-    for j in range(0, len(globals.subtlex_dataset)):
-        if words.WORD != globals.subtlex_dataset[j].WORD:
-            word_2 = globals.subtlex_dataset[j].IPA_LIST
-                
-            word_2_nlp = nlp(globals.subtlex_dataset[j].WORD)
-            for token in word_2_nlp:
-                word_2_lemma = str(token.lemma_).strip()
+        for j in range(0, len(words)):
+            if words[i].WORD != words[j].WORD:
+                word_2 = words[j].IPA_LIST
+                    
+                word_2_nlp = nlp(words[j].WORD)
+                for token in word_2_nlp:
+                    word_2_lemma = str(token.lemma_).strip()
 
-            # Check basic condition first
-            if textdistance.levenshtein.distance(word_1, word_2) == 1 and (word_2_lemma != word_1_lemma):
-                # Check if both are irregular
-                if (words.WORD not in irregular_words) or (globals.subtlex_dataset[j].WORD not in irregular_words):
-                    return_string = return_string + globals.subtlex_dataset[j].WORD + " "
-                    # f.write(f"{words[j].WORD} ")
-                    # g.write(f"{words[j].IPA} ")
+                # Check basic condition first
+                if textdistance.levenshtein.distance(word_1, word_2) == 1 and (word_2_lemma != word_1_lemma):
+                    # Check if both are irregular
+                    if (words[i].WORD not in irregular_words) or (words[j].WORD not in irregular_words):
+                        # return_string = return_string + words[j].WORD + " "
+                        f.write(f"{words[j].WORD} ")
+                        # g.write(f"{words[j].IPA} ")
 
-                # If both irregular then check irregular dictionary
-                elif subtlex_dataset[j].WORD not in irregular_words[words.WORD]:
-                    return_string = return_string + globals.subtlex_dataset[j].WORD + " "
-                    # f.write(f"{words[j].WORD} ")
-                    # g.write(f"{words[j].IPA} ")
-                
+                    # If both irregular then check irregular dictionary
+                    elif words[j].WORD not in irregular_words[words.WORD]:
+                        # return_string = return_string + words[j].WORD + " "
+                        f.write(f"{words[j].WORD} ")
+                        # g.write(f"{words[j].IPA} ")`
+                    
     # return_string + return_string + "\n"
-    print(words.WORD)
-    return return_string
+        print(words[i].WORD)
+    # return return_string
 
-# f.close()
+    f.close()
 # g.close()
 
 def create_graph():

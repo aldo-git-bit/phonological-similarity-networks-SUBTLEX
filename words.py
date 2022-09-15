@@ -11,12 +11,20 @@ class Words:
 
 
 def add_words_to_list_from_file(words):
-    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
-    for i in range(len(df['Word'])):
-        WORD = str(df['Word'][i]).strip()
-        IPA = str(df['IPA'][i]).strip()
-        IPA_LIST = str(df['IPA-List'][i]).strip().split()
-        words.append(Words(WORD, IPA, IPA_LIST))
+    data = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+    df = data.sample(frac = .0013)
+    #print(df['Word'])
+    # df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+    # df = df.sample(frac = 0.0013)
+    # j = 0
+    print(df['Word'])
+
+    # Original Code Below
+    # for i in range(len(df['Word'])):
+    #     WORD = str(df['Word'][i]).strip()
+    #     IPA = str(df['IPA'][i]).strip()
+    #     IPA_LIST = str(df['IPA-List'][i]).strip().split()
+    #     words.append(Words(WORD, IPA, IPA_LIST))
 
 
 def add_words_to_list(words):
