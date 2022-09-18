@@ -448,7 +448,7 @@ def number_of_lemmas(words, blank_array):
 
 def create_adjanceylist(words):
     f = open("words.adjlist", "w+")
-    # g = open("IPA.adjlist", "w+")
+    g = open("IPA.adjlist", "w+")
     two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
     vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
     irregular_words = {
@@ -876,7 +876,7 @@ def create_adjanceylist(words):
         for token in word_1_nlp:
             word_1_lemma = str(token.lemma_).strip()
             f.write(f"{words[i].WORD} ")
-        # g.write(f"{words[i].IPA} ")
+            g.write(f"{words[i].IPA} ")
         # print(words.WORD)     
         
         for j in range(0, len(words)):
@@ -893,20 +893,20 @@ def create_adjanceylist(words):
                     if (words[i].WORD not in irregular_words) or (words[j].WORD not in irregular_words):
                         # return_string = return_string + words[j].WORD + " "
                         f.write(f"{words[j].WORD} ")
-                        # g.write(f"{words[j].IPA} ")
+                        g.write(f"{words[j].IPA} ")
 
                     # If both irregular then check irregular dictionary
                     elif words[j].WORD not in irregular_words[words.WORD]:
                         # return_string = return_string + words[j].WORD + " "
                         f.write(f"{words[j].WORD} ")
-                        # g.write(f"{words[j].IPA} ")`
+                        g.write(f"{words[j].IPA} ")`
                     
     # return_string + return_string + "\n"
         print(words[i].WORD)
     # return return_string
 
     f.close()
-# g.close()
+    g.close()
 
 def create_graph():
     graph = nx.read_adjlist('words.adjlist')
