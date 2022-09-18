@@ -42,19 +42,15 @@ import concurrent.futures
         
 
 if __name__ == "__main__":
-    f = open("words.adjlist", "w+")
     # globals.initialize()
     subtlex_dataset = []
     add_words_to_list_from_file(subtlex_dataset)
-    # update_ipa(subtlex_dataset)
+    update_ipa(subtlex_dataset)
     # # print_global()
-    # create_adjanceylist(subtlex_dataset)
+    create_adjanceylist(subtlex_dataset)
     # with concurrent.futures.ThreadPoolExecutor() as executor:
     #     results = executor.map(create_adjanceylist, globals.subtlex_dataset)
     
     # for result in results:
     #     f.write(result)
     #     f.write("\n")
-
-    for i in subtlex_dataset:
-        print(f'{i.WORD} {i.IPA} {i.IPA_LIST} \n')
