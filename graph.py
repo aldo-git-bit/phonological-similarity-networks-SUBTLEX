@@ -900,7 +900,8 @@ def create_adjanceylist(words):
                         # return_string = return_string + words[j].WORD + " "
                         f.write(f"{words[j].WORD} ")
                         g.write(f"{words[j].IPA} ")
-                    
+        f.write("\n")
+        g.write("\n")
     # return_string + return_string + "\n"
         print(words[i].WORD)
     # return return_string
