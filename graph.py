@@ -899,7 +899,7 @@ def create_adjanceylist(words):
                     elif words[j].WORD not in irregular_words[words.WORD]:
                         # return_string = return_string + words[j].WORD + " "
                         f.write(f"{words[j].WORD} ")
-                        g.write(f"{words[j].IPA} ")`
+                        g.write(f"{words[j].IPA} ")
                     
     # return_string + return_string + "\n"
         print(words[i].WORD)

@@ -56,5 +56,5 @@ if __name__ == "__main__":
     #     f.write(result)
     #     f.write("\n")
 
-
-    f.close()
+    for i in subtlex_dataset:
+        print(f'{i.WORD} {i.IPA} {i.IPA_LIST} \n')
