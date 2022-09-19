@@ -447,8 +447,8 @@ def number_of_lemmas(words, blank_array):
 
 
 def create_adjanceylist(words):
-    f = open("words.adjlist", "w+")
-    g = open("IPA.adjlist", "w+")
+    f = open("words4096.adjlist", "w+")
+    g = open("IPA4096.adjlist", "w+")
     two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
     vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
     irregular_words = {
@@ -896,7 +896,7 @@ def create_adjanceylist(words):
                         g.write(f"{words[j].IPA} ")
 
                     # If both irregular then check irregular dictionary
-                    elif words[j].WORD not in irregular_words[words.WORD]:
+                    elif words[j].WORD not in irregular_words[words[i].WORD]:
                         # return_string = return_string + words[j].WORD + " "
                         f.write(f"{words[j].WORD} ")
                         g.write(f"{words[j].IPA} ")
