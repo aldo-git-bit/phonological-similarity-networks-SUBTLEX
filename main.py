@@ -3,6 +3,7 @@ from words import *
 from graph import *
 from smallworlds import *
 import globals
+import argparse
 import eng_to_ipa as ipa
 import subprocess
 import jellyfish
