@@ -2,6 +2,8 @@ import pandas as pd
 import eng_to_ipa as ipa
 import subprocess
 import openpyxl
+import argparse
+
 
 class Words:
     def __init__(self, WORD, IPA, IPA_LIST):
@@ -9,6 +11,10 @@ class Words:
         self.IPA = IPA
         self.IPA_LIST = IPA_LIST
 
+# Add Size parametre here
+
+def test_function(size):
+    print(size)
 
 def add_words_to_list_from_file(words):
     data  = pd.read_excel('SUBTLEX-US-Copy.xlsx')
