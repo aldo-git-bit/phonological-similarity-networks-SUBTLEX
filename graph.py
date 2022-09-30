@@ -447,8 +447,8 @@ def number_of_lemmas(words, blank_array):
 
 
 def create_adjanceylist(words):
-    f = open("words4096.adjlist", "w+")
-    g = open("IPA4096.adjlist", "w+")
+    f = open("words1024.adjlist", "w+")
+    g = open("IPA1024.adjlist", "w+")
     two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
     vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
     irregular_words = {
@@ -910,15 +910,16 @@ def create_adjanceylist(words):
     g.close()
 
 def create_graph():
-    graph = nx.read_adjlist('words.adjlist')
+    graph = nx.read_adjlist('words1024.adjlist')
     nx.draw(graph,
             with_labels=True,
             node_color='black',
-            node_size=18,
+            node_size=10,
             font_size=8,
             verticalalignment='baseline',
             edge_color='grey')
-    plt.savefig('graphhhhhhhhhh.png')
+    plt.savefig('words1024.png')
+    print(graph.number_of_nodes())
     plt.show()
 
 

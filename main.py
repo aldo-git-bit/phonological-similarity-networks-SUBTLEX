@@ -45,36 +45,30 @@ import concurrent.futures
 if __name__ == "__main__":  
     parser = argparse.ArgumentParser(description = 'Parametres')
 
-    parser.add_argument('-sf','--subtlexfile', type = bool, metavar = '', help = 'Do you have the IPA Subtlex File (True/False)')
+    parser.add_argument('-sf','--subtlexfile', type = bool, metavar = '', help = 'Do you have the IPA Subtlex File (True/False)', required=True)
     parser.add_argument('-al', '--edgelist', type = bool, metavar = '', help = 'Already Generated Adjancey/Edge List? (True/False)')
-    parser.add_argument('-size', '--size', type = int, metavar = '', help = "Size of Adjancey List")
+    parser.add_argument('-size', '--size', type = int, metavar = '', help = "Size of Adjancey List", required=True)
     parser.add_argument('-r', '--random', type = bool, metavar = '', help = "Random Sample (True/False)")
 
     args = parser.parse_args()
 
 
     # globals.initialize()
+    
     subtlex_dataset = []
-    
-    # if args.subtlexfile:
-    #     add_words_to_list_from_file(subtlex_dataset)
-    # else:
-    #     add_words_to_list(subtlex_daaset)
-    
-    test_function(args.size)
 
-    # update_ipa(subtlex_dataset)
+    if args.subtlexfile:
+        add_words_to_list_from_file(subtlex_dataset)
+    else:
+        add_words_to_list(subtlex_dataset)
+    
+    print(subtlex_dataset[0].WORD)
+    update_list(args.size, subtlex_dataset)
+    
+    update_ipa(subtlex_dataset)
 
 
     # # print_global()
     
-    # create_adjanceylist(subtlex_dataset)
-
-
-
-    # with concurrent.futures.ThreadPoolExecutor() as executor:
-    #     results = executor.map(create_adjanceylist, globals.subtlex_dataset)
-    
-    # for result in results:
-    #     f.write(result)
-    #     f.write("\n")
+    create_adjanceylist(subtlex_dataset)
+    create_graph()

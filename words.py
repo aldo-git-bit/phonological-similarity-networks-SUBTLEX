@@ -6,37 +6,58 @@ import argparse
 
 
 class Words:
-    def __init__(self, WORD, IPA, IPA_LIST):
+    def __init__(self, WORD, IPA, IPA_LIST, FREQcount):
         self.WORD = WORD
         self.IPA = IPA
         self.IPA_LIST = IPA_LIST
+        self.FREQcount = FREQcount
 
-# Add Size parametre here
 
-def test_function(size):
-    print(size)
+def update_list(size, words):
+    words.sort(key=lambda x: x.FREQcount, reverse=True)
+    while len(words) // 2 > size:
+        mid = len(words) // 2
+        median = (words[mid].FREQcount + words[-mid - 1].FREQcount) / 2
+        if words[mid].FREQcount < median:
+            del words[mid:]
+        elif words[mid+1].FREQcount < median:
+            del words[mid+1:]
+    
+    mid = len(words) // 2
+    median = (words[mid].FREQcount + words[-mid-1]) / 2
+
+    if words[mid].FREQcount >= median:
+        mid_val = words[mid]
+    else:
+        mid_val = words[mid+1]
+    
+    while len(words) != size:
+        element = random.randrange(words.index(mid_val) + 1, len(words))
+        words.pop(element)
 
 def add_words_to_list_from_file(words):
-    data  = pd.read_excel('SUBTLEX-US-Copy.xlsx')
-    df = data.sample(n = 4096, random_state = 1)
-    for label, row in df.iterrows():
-       WORD = str(row['Word']).strip()
-       IPA = str(row['IPA']).strip()
-       IPA_LIST = str(row['IPA-List']).strip().split()
-       words.append(Words(WORD, IPA, IPA_LIST))
+    # data  = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+    # df = data.sample(n = 4096, random_state = 1)
+    # for label, row in df.iterrows():
+    #    WORD = str(row['Word']).strip()
+    #    IPA = str(row['IPA']).strip()
+    #    IPA_LIST = str(row['IPA-List']).strip().split()
+    #    words.append(Words(WORD, IPA, IPA_LIST))
 
     #print(df['Word'])
-    # df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
     # df = df.sample(frac = 0.0013)
     # j = 0
     # print(df['Word'])
 
     # Original Code Below
-    # for i in range(len(df['Word'])):
-       #  WORD = str(df['Word'][i]).strip()
-       #  IPA = str(df['IPA'][i]).strip()
-       #  IPA_LIST = str(df['IPA-List'][i]).strip().split()
-       #  words.append(Words(WORD, IPA, IPA_LIST))
+    for i in range(len(df['Word'])):
+        WORD = str(df['Word'][i]).strip()
+        IPA = str(df['IPA'][i]).strip()
+        IPA_LIST = str(df['IPA-List'][i]).strip().split()
+        FREQcount = int(df['FREQcount'][i])
+        words.append(Words(WORD, IPA, IPA_LIST, FREQcount))
+
 
 
 def add_words_to_list(words):
@@ -63,8 +84,8 @@ def add_words_to_list(words):
         #     IPA = lines[0][1:].replace(" ", "")
         #     IPA = IPA.replace(">", " ")
         #     IPA = IPA.strip()
-
-        words.append(Words(WORD, IPA, list(IPA)))
+        FREQcount = int(df['FREQcount'][i])
+        words.append(Words(WORD, IPA, list(IPA), FREQcount))
 
 def update_ipa(words):
     two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
