@@ -1,54 +1,119 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import pprint
+import eng_to_ipa as ipa
+import subprocess
+import openpyxl
+import argparse
 
 
 class Words:
-    def __init__(self, word, POS, FREQ):
-        self.word = word
-        self.POS = POS
-        self.FREQ = FREQ
+    def __init__(self, WORD, IPA, IPA_LIST, FREQcount):
+        self.WORD = WORD
+        self.IPA = IPA
+        self.IPA_LIST = IPA_LIST
+        self.FREQcount = FREQcount
 
 
-# TODO: Think about what we want to do for words with N/A ratings. Currently displayed as nan but changed to N/A
-"""
-For words without values in the "All_freqs_SUBTLEX" field, we could grab the number from FREQcount as well, but 
-we will be left without a Part of Speech, and we are unsure what the relationship between count and POS would be 
-"""
+def update_list(size, words):
+    words.sort(key=lambda x: x.FREQcount, reverse=True)
+    while len(words) // 2 > size:
+        mid = len(words) // 2
+        median = (words[mid].FREQcount + words[-mid - 1].FREQcount) / 2
+        if words[mid].FREQcount < median:
+            del words[mid:]
+        elif words[mid+1].FREQcount < median:
+            del words[mid+1:]
+    
+    mid = len(words) // 2
+    median = (words[mid].FREQcount + words[-mid-1]) / 2
 
-# TODO: Add a clause to automatically adjust the POS if needed for each word
-""" 
-We'll have to check with an if statement for the word if we want to automate this. 
-e.g if word == "horsefly" -> words.append(word, "Noun", FREQ[0]
+    if words[mid].FREQcount >= median:
+        mid_val = words[mid]
+    else:
+        mid_val = words[mid+1]
+    
+    while len(words) != size:
+        element = random.randrange(words.index(mid_val) + 1, len(words))
+        words.pop(element)
 
-"""
+def add_words_to_list_from_file(words):
+    # data  = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+    # df = data.sample(n = 4096, random_state = 1)
+    # for label, row in df.iterrows():
+    #    WORD = str(row['Word']).strip()
+    #    IPA = str(row['IPA']).strip()
+    #    IPA_LIST = str(row['IPA-List']).strip().split()
+    #    words.append(Words(WORD, IPA, IPA_LIST))
+
+    #print(df['Word'])
+    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+    # df = df.sample(frac = 0.0013)
+    # j = 0
+    # print(df['Word'])
+
+    # Original Code Below
+    for i in range(len(df['Word'])):
+        WORD = str(df['Word'][i]).strip()
+        IPA = str(df['IPA'][i]).strip()
+        IPA_LIST = str(df['IPA-List'][i]).strip().split()
+        FREQcount = int(df['FREQcount'][i])
+        words.append(Words(WORD, IPA, IPA_LIST, FREQcount))
 
 
-# TODO: Check if we need to change the class to append the POS to the word
-# TODO: IPA Conversion in a timely manner, and what to do if IPA conversion doesn't exist
 
 def add_words_to_list(words):
-    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
+    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
     for i in range(len(df['Word'])):
-        word = str(df['Word'][i])
-        POS = str(df['All_PoS_SUBTLEX'][i]).split(".")
-        FREQ = str(df['All_freqs_SUBTLEX'][i]).split(".")
-        if len(POS) == 1:
-            # if POS[0] == "nan" and FREQ[0] == "nan":
-            # words.append(Words(word, "N/A", "N/A")) # If we want to keep it as N/A
-            #     words.append(Words(word, "N/A", str(df['FREQcount'][i])))  # If we want to use FREQcount
-            # elif POS[0] == "nan" and FREQ[0] != "nan":
-            #     words.append(Words(word, "N/A", FREQ[0]))
-            # elif POS[0] != "nan" and FREQ[0] == "nan":
-            #     words.append(Words(word, POS[0], str(df['FREQcount'][i])))
-            # else:
-            if POS[0] == "nan":
-                words.append(Words(word, POS[0], str(df['FREQcount'][i])))
-            else:
-                words.append(Words(word, POS[0], FREQ[0]))
-        else:
-            for j in range(len(POS)):
-                words.append(Words(word, POS[j], FREQ[j]))
+        WORD = str(df['Word'][i]).strip()
+        IPA = str(ipa.convert(WORD)).strip()
+        IPA = IPA.replace("ˈ", "")
+        IPA = IPA.replace("ˌ", "")
+        if IPA[len(IPA) - 1] == "*":
+            IPA = str(subprocess.run(['bash', 'ipa_translator.sh', WORD]))
+            with open('ipa_translation.txt') as f:
+                lines = f.readlines()
+                IPA = lines[0][1:].replace(" ", "")
+                IPA = IPA.replace(">", " ")
+                IPA = IPA.strip()
+                IPA = IPA.strip("\n")
+            
+       #  if IPA[len(IPA) - 1] == "*":
+           #  print(word)
+        # subprocess.run(['bash', 'ipa_translator.sh', word])
+        # with open('ipa_translation.txt') as f:
+        #     lines = f.readlines()
+        #     IPA = lines[0][1:].replace(" ", "")
+        #     IPA = IPA.replace(">", " ")
+        #     IPA = IPA.strip()
+        FREQcount = int(df['FREQcount'][i])
+        words.append(Words(WORD, IPA, list(IPA), FREQcount))
+
+def update_ipa(words):
+    two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
+    vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
+
+    for i in range(0, len(words)):
+        word_1 = words[i].IPA_LIST
+        temp_array_word = []
+        temp_array_word.append(word_1[0])
+
+        for k in range(1, len(word_1)):
+            temp_array_word.append(word_1[k])
+
+            if (word_1[k-1] + word_1[k] == "ər") and (k != len(word_1) - 1) and (word_1[k+1] not in vowels):
+                    # print(f"{words[i].WORD}...... {word_1}.....{word_1[k+1]}")
+                    temp_array_word.pop()
+                    temp_array_word.pop()
+                    temp_array_word.append(word_1[k-1] + word_1[k])
+
+
+            elif (word_1[k-1] + word_1[k] in two_character_phonemes):
+                temp_array_word.pop()
+                temp_array_word.pop()
+                temp_array_word.append(word_1[k-1] + word_1[k])
+        
+        words[i].IPA_LIST = temp_array_word
+                
+                
 
 
 def words_without_pos(words):
@@ -77,7 +142,7 @@ def total_pos(words, total_nan):
 def total_pos_reading_from_file():
     total = 0
     num_words = 0
-    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
+    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
     for i in range(len(df['Word'])):
         POS = str(df['All_PoS_SUBTLEX'][i]).split(".")
         if len(POS) == 1:
@@ -102,7 +167,7 @@ def total_pos_reading_from_file():
 # Does not include nan values
 def frequency_distribution(freq_words):
     frequency = {}
-    df = pd.read_excel('SUBTLEX-US-Compressed.xlsx')
+    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
     for i in range(len(df['Word'])):
         POS = str(df['All_PoS_SUBTLEX'][i])  # As of now we are treating X.Y separately compared to Y.X
         if POS != 'nan':  # remove if statement if we want nan included in this frequency distribution
