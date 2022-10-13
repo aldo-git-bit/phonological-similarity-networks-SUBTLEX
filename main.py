@@ -71,4 +71,4 @@ if __name__ == "__main__":
     # # print_global()
     
     create_adjanceylist(subtlex_dataset)
-    create_graph()
+    # create_graph()
