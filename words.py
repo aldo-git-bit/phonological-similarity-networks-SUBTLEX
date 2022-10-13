@@ -3,6 +3,7 @@ import eng_to_ipa as ipa
 import subprocess
 import openpyxl
 import argparse
+import random
 
 
 class Words:
@@ -15,6 +16,7 @@ class Words:
 
 def update_list(size, words):
     words.sort(key=lambda x: x.FREQcount, reverse=True)
+    print(words[3].WORD)
     while len(words) // 2 > size:
         mid = len(words) // 2
         median = (words[mid].FREQcount + words[-mid - 1].FREQcount) / 2
@@ -22,10 +24,13 @@ def update_list(size, words):
             del words[mid:]
         elif words[mid+1].FREQcount < median:
             del words[mid+1:]
+        else:
+            del words[mid+2:]
     
     mid = len(words) // 2
-    median = (words[mid].FREQcount + words[-mid-1]) / 2
-
+    median = (words[mid].FREQcount + words[-mid-1].FREQcount) / 2
+   
+    print(f"Words after first for loop {len(words)}")
     if words[mid].FREQcount >= median:
         mid_val = words[mid]
     else:
@@ -34,7 +39,8 @@ def update_list(size, words):
     while len(words) != size:
         element = random.randrange(words.index(mid_val) + 1, len(words))
         words.pop(element)
-
+        print(len(words))
+    
 def add_words_to_list_from_file(words):
     # data  = pd.read_excel('SUBTLEX-US-Copy.xlsx')
     # df = data.sample(n = 4096, random_state = 1)
