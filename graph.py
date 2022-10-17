@@ -447,8 +447,8 @@ def number_of_lemmas(words, blank_array):
 
 
 def create_adjanceylist(words):
-    f = open("words2048.adjlist", "w+")
-    g = open("IPA2048.adjlist", "w+")
+    f = open("words8192.adjlist", "w+")
+    g = open("IPA8192.adjlist", "w+")
     two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
     vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
     irregular_words = {
