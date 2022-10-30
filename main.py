@@ -55,7 +55,7 @@ def word_size_error(error):
     print("Error: Range specified is out of bounds. Range from 1 - 74287 inclusive was expected, got {error}")
 
 def edge_list_file_error(error):
-    print("Error: File Not Found. Make sure the pathing is correct")
+    print("Error: File Not Found. Make sure the pathing is correct, and the file is an .adjlist")
         
 
 if __name__ == "__main__":  
@@ -68,8 +68,7 @@ if __name__ == "__main__":
     # parser.add_argument('-r', '--random', type = str, metavar = '', help = "Random Sample (True/False)")
 
     args = parser.parse_args()
-
-
+    
     
     # Check conditions 
     if args.subtlexfile.lower().strip() not in ['f', 'false', 't', 'true']:
@@ -84,7 +83,7 @@ if __name__ == "__main__":
     elif args.lemmawords.lower().strip() == 'wordforms' and (args.size <= 0 or args.size >= 74288 ):
         word_size_error(args.size)
     
-    elif args.edgelist is not None and os.path.isfile(args.edgelist):
+    elif args.edgelist is not None and ( os.path.isfile(args.edgelist) and os.path.splitext(file_path)[1].lower() == ".adjlist" ):
         edge_list_file_error(args.edgelist)
     
     #Run program here based on arguments
@@ -92,8 +91,7 @@ if __name__ == "__main__":
 
         subtlex_dataset = []
         lemmas = []
-        if args.subtlex
-
+        
         if args.edgelist is not None and os.path.isfile(args.edgelist):
             create_graph(args.edgelist)
         
@@ -104,7 +102,7 @@ if __name__ == "__main__":
             add_words_to_list(subtlex_dataset)
             update_file()
 
-        if args.subtlex.lemmawords.lower().strip() =='lemma':
+        if args.lemmawords.lower().strip() =='lemma':
             number_of_lemmas(subtlex_dataset, lemmas)
             update_list(args.size, lemmas)
             update_ipa(lemmas)
