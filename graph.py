@@ -438,10 +438,10 @@ def number_of_lemmas(words, blank_array):
                     break
 
             if not in_array:
-                blank_array.append(words[i].WORD)
+                blank_array.append(words[i])
 
         elif word_1_lemma not in blank_array:
-            blank_array.append(words[i].WORD)
+            blank_array.append(words[i])
 
 
             

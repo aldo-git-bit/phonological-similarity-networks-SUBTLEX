@@ -104,16 +104,17 @@ if __name__ == "__main__":
 
         if args.lemmawords.lower().strip() =='lemma':
             number_of_lemmas(subtlex_dataset, lemmas)
+            print(f"Number of m lemmas {len(lemmas)}")
             update_list(args.size, lemmas)
             update_ipa(lemmas)
             filename = create_adjanceylist_lemma(args.size, lemmas)
-            create_graph(filename)
+            # create_graph(filename)
         
         else:
             update_list(args.size, subtlex_dataset)
             update_ipa(subtlex_dataset)
             filename = create_adjanceylist(args.size, subtlex_dataset)
-            create_graph(filename)
+            # create_graph(filename)
 
 
     
