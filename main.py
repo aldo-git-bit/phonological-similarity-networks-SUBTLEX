@@ -91,17 +91,18 @@ if __name__ == "__main__":
 
         subtlex_dataset = []
         lemmas = []
-        
+    
         if args.edgelist is not None and os.path.isfile(args.edgelist):
             create_graph(args.edgelist)
         
         elif args.subtlexfile.lower().strip() in ['t', 'true']:
             add_words_to_list_from_file(subtlex_dataset)
+            print(f"THIS IS LEN OF DATASET {len(subtlex_dataset)}")
         else:
             create_file()
             add_words_to_list(subtlex_dataset)
             update_file()
-
+    
         if args.lemmawords.lower().strip() =='lemma':
             number_of_lemmas(subtlex_dataset, lemmas)
             print(f"Number of m lemmas {len(lemmas)}")
