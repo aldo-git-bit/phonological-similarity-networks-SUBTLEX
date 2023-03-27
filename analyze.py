@@ -484,7 +484,8 @@ def getSystemFactsWordForms(edgeLists):
         average_degree = (total_degree / num_nodes)
         hetrogeneity_parameter_k = math.sqrt(average_degree) / (average_degree * average_degree)
         table.append([num_nodes, num_edges, density, nodes_in_giant_component, islands_nodes, hermits, number_of_islands, shortest_path_length_giant_component, average_clustering, degree_assortaivity, max_degree, hetrogeneity_parameter_k])
-        df = pd.DataFrame(table, columns = ['Nodes', 'Links', 'Density', 'Giant Nodes', 'Islands Nodes', 'Hermits Nodes', '# of Small Islands', 'Avg Short Path Giant', 'Average Clustering Coefficient Giant', 'Degree Assortativity', 'Max Degree', 'Heterogeneity Parameter K'], index=edgeLists)
+    
+    df = pd.DataFrame(table, columns = ['Nodes', 'Links', 'Density', 'Giant Nodes', 'Islands Nodes', 'Hermits Nodes', '# of Small Islands', 'Avg Short Path Giant', 'Average Clustering Coefficient Giant', 'Degree Assortativity', 'Max Degree', 'Heterogeneity Parameter K'], index=edgeLists)
     pd.set_option("display.max_columns", None)
     pd.set_option("display.max_rows", None)
     pd.set_option('display.width', 350)
@@ -536,11 +537,13 @@ def getSystemFactsLemmas(edgeLists):
 
         average_degree = (total_degree / num_nodes)
         hetrogeneity_parameter_k = math.sqrt(average_degree) / (average_degree * average_degree)
+        
         table.append([num_nodes, num_edges, density, nodes_in_giant_component, islands_nodes, hermits, number_of_islands, shortest_path_length_giant_component, average_clustering, degree_assortaivity, max_degree, hetrogeneity_parameter_k])
-        df = pd.DataFrame(table, columns = ['Nodes', 'Links', 'Density', 'Giant Nodes', 'Islands Nodes', 'Hermits Nodes', '# of Small Islands', 'Avg Shortset Path Giant', 'Average Clustering Coefficient Giant', 'Degree Assortativity', 'Max Degree', 'Heterogeneity Parameter K'], index=edgeLists)
-        pd.set_option("display.max_columns", None)
-        pd.set_option("display.max_rows", None)
-        pd.set_option('display.width', 350)
+    
+    df = pd.DataFrame(table, columns = ['Nodes', 'Links', 'Density', 'Giant Nodes', 'Islands Nodes', 'Hermits Nodes', '# of Small Islands', 'Avg Shortset Path Giant', 'Average Clustering Coefficient Giant', 'Degree Assortativity', 'Max Degree', 'Heterogeneity Parameter K'], index=edgeLists)
+    pd.set_option("display.max_columns", None)
+    pd.set_option("display.max_rows", None)
+    pd.set_option('display.width', 350)
     print(df)
     f = open("System-Facts-Lemma.txt", "w+")
     f.write(str(df))
