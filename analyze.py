@@ -3,9 +3,21 @@ import pandas as pd
 import openpyxl
 import matplotlib.pyplot as plt
 import math
+import eng_to_ipa as ipa
+import textdistance
+import spacy
+import os
 
-# WRITE A VALIDATE FUNCTION TO REMOVE SELF LOOPS
-def validate(edgelist):
+
+
+class Words:
+    def __init__(self, WORD, IPA, IPA_LIST):
+        self.WORD = WORD
+        self.IPA = IPA
+        self.IPA_LIST = IPA_LIST
+
+
+def validateWordEdgeList(edgelist):
     irregular_words = {
         "person":["people"],
         "people":["person"],
@@ -427,6 +439,87 @@ def validate(edgelist):
 
     }
     graph = nx.read_adjlist(edgelist)
+    # if statement to run this only when we use "null" in larger datasets
+    if edgelist in ['words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist']:
+        # Missing word information ---------
+        missing_word = "null"
+        missing_word_IPA = ipa.convert(missing_word)
+        missing_word_list = list(missing_word_IPA)
+
+        word_2_nlp = nlp(missing_word)
+        for token in word_2_nlp:
+            word_2_lemma = str(token.lemma_).strip()
+        # --------------------------------------
+
+
+        graph.add_node(missing_word)
+        
+        # Information to get similar data used previously. 
+        words = []
+        two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
+        vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
+        
+       
+
+        # Run through SUBTLEX and get the words and IPA translations
+        df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+        for j in range(len(df['Word'])):
+            WORD = str(df['Word'][j]).strip()
+            if WORD not in words.WORD:
+                IPA = str(df['IPA'][j]).strip()
+                IPA_LIST = str(df['IPA-List'][j]).strip().split()
+                words.append(Words(WORD, IPA, IPA_LIST))
+
+        # Look for the two phoneme rule, where they should as one character. This does not apply to null
+        for i in range(0, len(words)):
+            word_1 = words[i].IPA_LIST
+            temp_array_word = []
+            temp_array_word.append(word_1[0])
+
+
+            for k in range(1, len(word_1)):
+                temp_array_word.append(word_1[k])
+
+                if (word_1[k-1] + word_1[k] == "ər") and (k != len(word_1) - 1) and (word_1[k+1] not in vowels):
+                        # print(f"{words[i].WORD}...... {word_1}.....{word_1[k+1]}")
+                        temp_array_word.pop()
+                        temp_array_word.pop()
+                        temp_array_word.append(word_1[k-1] + word_1[k])
+
+
+                elif (word_1[k-1] + word_1[k] in two_character_phonemes):
+                    temp_array_word.pop()
+                    temp_array_word.pop()
+                    temp_array_word.append(word_1[k-1] + word_1[k])
+            
+            words[i].IPA_LIST = temp_array_word
+        
+        
+        # Create an edge between the nodes in the edgelists and null, and vice versa
+        for k in range(0, len(words)):
+            word_1 = words[k].IPA_LIST
+            word_1_nlp = nlp(words[k].WORD)
+            for token in word_1_nlp:
+                word_1_lemma = str(token.lemma_).strip()
+
+            # Check basic condition first
+            if textdistance.levenshtein.distance(word_1, missing_word_list) == 1 and (word_2_lemma != word_1_lemma):
+                # Check if both are irregular
+                if (words[k].WORD not in irregular_words) or (missing_word not in irregular_words):
+                    # return_string = return_string + words[j].WORD + " "
+                    nx.add_edge(words[k].WORD, missing_word)
+                    nx.add_edge(missing_word, words[k].WORD)
+                    
+
+                # If both irregular then check irregular dictionary
+                elif missing_word not in irregular_words[words[k].WORD]:
+                    # return_string = return_string + words[j].WORD + " "
+                    nx.add_edge(words[k].WORD, missing_word)
+                    nx.add_edge(missing_word, words[k].WORD)
+
+        
+    
+    # Remove self loops
     for nodes in graph.nodes():
         if graph.has_edge(nodes,nodes):
             graph.remove_edge(nodes,nodes)
@@ -439,6 +532,7 @@ def validate(edgelist):
     file = open(f"validate-{edgelist}", "wb")
     nx.write_adjlist(graph, file) 
     return graph
+
 
 
 def getSystemFactsWordForms(edgeLists):
@@ -602,8 +696,7 @@ def getWordFacts(edgelist, list_of_words):
 # words = input("Enter the path of your xlsx word list: ")
 
 
-# getWordFacts(filename, words)
-
+# getWordFacts(filename, words)  
 
 
 # getSystemFacts(['words1024.adjlist', 'words2048.adjlist', 'words4096.adjlist', 'words8192.adjlist', 'words16384.adjlist', 'words19839.adjlist', 'words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist'])
@@ -613,10 +706,82 @@ def getWordFacts(edgelist, list_of_words):
 
 # graph = validate('words74286.adjlist')
 
-getSystemFactsWordForms(['words1024.adjlist', 'words2048.adjlist', 'words4096.adjlist', 'words8192.adjlist', 'words16384.adjlist', 'words19839.adjlist', 'words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist'])
-print("\n")
-getSystemFactsLemmas(['lemma_words1024.adjlist', 'lemma_words2048.adjlist', 'lemma_words4096.adjlist', 'lemma_words8192.adjlist', 'lemma_words16384.adjlist', 'lemma_words19839.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist'])
+# getSystemFactsWordForms(['words1024.adjlist', 'words2048.adjlist', 'words4096.adjlist', 'words8192.adjlist', 'words16384.adjlist', 'words19839.adjlist', 'words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist'])
+# print("\n")
+# getSystemFactsLemmas(['lemma_words1024.adjlist', 'lemma_words2048.adjlist', 'lemma_words4096.adjlist', 'lemma_words8192.adjlist', 'lemma_words16384.adjlist', 'lemma_words19839.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist'])
 
+
+
+df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+    # df = df.sample(frac = 0.0013)
+    # j = 0
+    # print(df['Word'])
+
+    # Original Code Below
+import collections 
+excel_file = []
+new_excel = []
+
+for i in range(len(df['Word'])):
+    WORD = str(df['Word'][i]).strip()
+    excel_file.append(WORD)
+
+# new_excel = list( dict.fromkeys(excel_file) ) 
+
+graph = nx.read_adjlist('words74286.adjlist')
+new_excel = list(graph.nodes())
+
+
+excel_file.sort()
+new_excel.sort()
+
+print(f"Length of excel: {len(excel_file)}")
+print(f"Length of excel: {len(new_excel)}")
+
+print([item for item, count in collections.Counter(excel_file).items() if count > 1])
+
+# The word null is missing. See if we run the adjancey lists BUT append this word here. 
+
+for i in range(0,len(excel_file)):
+    if excel_file[i] != new_excel[i]:
+        print(i)
+        print(f"{excel_file[i]} at excel and {new_excel[i]}")
+        print("--------")
+        print(i-2)
+        print(f"{excel_file[i - 2]} at excel and {new_excel[i - 2]}")
+        print("--------")
+        print("--------")
+        print(i-1)
+        print(f"{excel_file[i - 1]} at excel and {new_excel[i - 1]}")
+        print("--------")
+        print(i+1)
+        print(f"{excel_file[i + 1]} at excel and {new_excel[i + 1]}")
+        break
+
+
+# print("\n \n \n")
+# ma = 0
+# for i in range(0,len(excel_file)):
+#     if excel_file[i] in new_excel:
+#         new_excel.remove(excel_file[i])
+#     else:
+#         ma = i
+
+# print(excel_file[ma])
+# print(len(new_excel))
+
+
+# for i in (['nanas', 'nana']):
+#     if i not in excel_file:
+#         print("GGGGSG")
+
+
+
+print()
+
+
+# print(excel_file[1021])
+# print(new_excel[1021])
 
 
 # file = open("validated-words74286.adjlist", "wb")
