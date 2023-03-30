@@ -539,7 +539,7 @@ def getSystemFactsWordForms(edgeLists):
     table = []
     for i in edgeLists:
         print(i)
-        graph = validate(i)
+        graph = validateWordEdgeList(i)
         num_nodes = graph.number_of_nodes()
         num_edges = graph.number_of_edges()
         density = nx.density(graph)
@@ -593,7 +593,7 @@ def getSystemFactsLemmas(edgeLists):
     table = []
     for i in edgeLists:
         print(i)
-        graph = validate(i)
+        graph = validateWordEdgeList(i)
         num_nodes = graph.number_of_nodes()
         num_edges = graph.number_of_edges()
         density = nx.density(graph)
@@ -706,57 +706,57 @@ def getWordFacts(edgelist, list_of_words):
 
 # graph = validate('words74286.adjlist')
 
-# getSystemFactsWordForms(['words1024.adjlist', 'words2048.adjlist', 'words4096.adjlist', 'words8192.adjlist', 'words16384.adjlist', 'words19839.adjlist', 'words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist'])
-# print("\n")
-# getSystemFactsLemmas(['lemma_words1024.adjlist', 'lemma_words2048.adjlist', 'lemma_words4096.adjlist', 'lemma_words8192.adjlist', 'lemma_words16384.adjlist', 'lemma_words19839.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist'])
+getSystemFactsWordForms(['words1024.adjlist', 'words2048.adjlist', 'words4096.adjlist', 'words8192.adjlist', 'words16384.adjlist', 'words19839.adjlist', 'words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist'])
+print("\n")
+getSystemFactsLemmas(['lemma_words1024.adjlist', 'lemma_words2048.adjlist', 'lemma_words4096.adjlist', 'lemma_words8192.adjlist', 'lemma_words16384.adjlist', 'lemma_words19839.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist'])
 
 
 
-df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
-    # df = df.sample(frac = 0.0013)
-    # j = 0
-    # print(df['Word'])
+# df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+#     # df = df.sample(frac = 0.0013)
+#     # j = 0
+#     # print(df['Word'])
 
-    # Original Code Below
-import collections 
-excel_file = []
-new_excel = []
+#     # Original Code Below
+# import collections 
+# excel_file = []
+# new_excel = []
 
-for i in range(len(df['Word'])):
-    WORD = str(df['Word'][i]).strip()
-    excel_file.append(WORD)
+# for i in range(len(df['Word'])):
+#     WORD = str(df['Word'][i]).strip()
+#     excel_file.append(WORD)
 
-# new_excel = list( dict.fromkeys(excel_file) ) 
+# # new_excel = list( dict.fromkeys(excel_file) ) 
 
-graph = nx.read_adjlist('words74286.adjlist')
-new_excel = list(graph.nodes())
+# graph = nx.read_adjlist('words74286.adjlist')
+# new_excel = list(graph.nodes())
 
 
-excel_file.sort()
-new_excel.sort()
+# excel_file.sort()
+# new_excel.sort()
 
-print(f"Length of excel: {len(excel_file)}")
-print(f"Length of excel: {len(new_excel)}")
+# print(f"Length of excel: {len(excel_file)}")
+# print(f"Length of excel: {len(new_excel)}")
 
-print([item for item, count in collections.Counter(excel_file).items() if count > 1])
+# print([item for item, count in collections.Counter(excel_file).items() if count > 1])
 
-# The word null is missing. See if we run the adjancey lists BUT append this word here. 
+# # The word null is missing. See if we run the adjancey lists BUT append this word here. 
 
-for i in range(0,len(excel_file)):
-    if excel_file[i] != new_excel[i]:
-        print(i)
-        print(f"{excel_file[i]} at excel and {new_excel[i]}")
-        print("--------")
-        print(i-2)
-        print(f"{excel_file[i - 2]} at excel and {new_excel[i - 2]}")
-        print("--------")
-        print("--------")
-        print(i-1)
-        print(f"{excel_file[i - 1]} at excel and {new_excel[i - 1]}")
-        print("--------")
-        print(i+1)
-        print(f"{excel_file[i + 1]} at excel and {new_excel[i + 1]}")
-        break
+# for i in range(0,len(excel_file)):
+#     if excel_file[i] != new_excel[i]:
+#         print(i)
+#         print(f"{excel_file[i]} at excel and {new_excel[i]}")
+#         print("--------")
+#         print(i-2)
+#         print(f"{excel_file[i - 2]} at excel and {new_excel[i - 2]}")
+#         print("--------")
+#         print("--------")
+#         print(i-1)
+#         print(f"{excel_file[i - 1]} at excel and {new_excel[i - 1]}")
+#         print("--------")
+#         print(i+1)
+#         print(f"{excel_file[i + 1]} at excel and {new_excel[i + 1]}")
+#         break
 
 
 # print("\n \n \n")
@@ -775,9 +775,7 @@ for i in range(0,len(excel_file)):
 #     if i not in excel_file:
 #         print("GGGGSG")
 
-
-
-print()
+# print()
 
 
 # print(excel_file[1021])
