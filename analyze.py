@@ -441,6 +441,7 @@ def validateWordEdgeList(edgelist):
     graph = nx.read_adjlist(edgelist)
     # if statement to run this only when we use "null" in larger datasets
     if edgelist in ['words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist']:
+        nlp = spacy.load('en_core_web_sm', disable=['parser','ner'])
         # Missing word information ---------
         missing_word = "null"
         missing_word_IPA = ipa.convert(missing_word)
@@ -463,14 +464,13 @@ def validateWordEdgeList(edgelist):
         df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
         for j in range(len(df['Word'])):
             WORD = str(df['Word'][j]).strip()
-            if WORD not in words.WORD:
-                IPA = str(df['IPA'][j]).strip()
-                IPA_LIST = str(df['IPA-List'][j]).strip().split()
-                words.append(Words(WORD, IPA, IPA_LIST))
+            IPA = str(df['IPA'][j]).strip()
+            IPA_LIST = str(df['IPA-List'][j]).strip().split()
+            words.append(Words(WORD, IPA, IPA_LIST))
 
         # Look for the two phoneme rule, where they should as one character. This does not apply to null
         for i in range(0, len(words)):
-            if words[i].WORD in G.nodes():
+            if words[i].WORD in graph.nodes():
                 word_1 = words[i].IPA_LIST
                 temp_array_word = []
                 temp_array_word.append(word_1[0])
@@ -496,7 +496,7 @@ def validateWordEdgeList(edgelist):
         
         # Create an edge between the nodes in the edgelists and null, and vice versa
         for k in range(0, len(words)):
-            if words[k].WORD in G.nodes():
+            if words[k].WORD in graph.nodes():
                 word_1 = words[k].IPA_LIST
                 word_1_nlp = nlp(words[k].WORD)
                 for token in word_1_nlp:
@@ -507,15 +507,15 @@ def validateWordEdgeList(edgelist):
                     # Check if both are irregular
                     if (words[k].WORD not in irregular_words) or (missing_word not in irregular_words):
                         # return_string = return_string + words[j].WORD + " "
-                        nx.add_edge(words[k].WORD, missing_word)
-                        nx.add_edge(missing_word, words[k].WORD)
+                        graph.add_edge(words[k].WORD, missing_word)
+                        graph.add_edge(missing_word, words[k].WORD)
                         
 
                     # If both irregular then check irregular dictionary
                     elif missing_word not in irregular_words[words[k].WORD]:
                         # return_string = return_string + words[j].WORD + " "
-                        nx.add_edge(words[k].WORD, missing_word)
-                        nx.add_edge(missing_word, words[k].WORD)
+                        graph.add_edge(words[k].WORD, missing_word)
+                        graph.add_edge(missing_word, words[k].WORD)
 
         
     
