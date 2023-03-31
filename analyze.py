@@ -445,14 +445,12 @@ def validateWordEdgeList(edgelist):
         missing_word = "null"
         missing_word_IPA = ipa.convert(missing_word)
         missing_word_list = list(missing_word_IPA)
+        graph.add_node(missing_word) 
 
         word_2_nlp = nlp(missing_word)
         for token in word_2_nlp:
             word_2_lemma = str(token.lemma_).strip()
         # --------------------------------------
-
-
-        graph.add_node(missing_word)
         
         # Information to get similar data used previously. 
         words = []
@@ -472,50 +470,52 @@ def validateWordEdgeList(edgelist):
 
         # Look for the two phoneme rule, where they should as one character. This does not apply to null
         for i in range(0, len(words)):
-            word_1 = words[i].IPA_LIST
-            temp_array_word = []
-            temp_array_word.append(word_1[0])
+            if words[i].WORD in G.nodes():
+                word_1 = words[i].IPA_LIST
+                temp_array_word = []
+                temp_array_word.append(word_1[0])
 
 
-            for k in range(1, len(word_1)):
-                temp_array_word.append(word_1[k])
+                for k in range(1, len(word_1)):
+                    temp_array_word.append(word_1[k])
 
-                if (word_1[k-1] + word_1[k] == "ər") and (k != len(word_1) - 1) and (word_1[k+1] not in vowels):
-                        # print(f"{words[i].WORD}...... {word_1}.....{word_1[k+1]}")
+                    if (word_1[k-1] + word_1[k] == "ər") and (k != len(word_1) - 1) and (word_1[k+1] not in vowels):
+                            # print(f"{words[i].WORD}...... {word_1}.....{word_1[k+1]}")
+                            temp_array_word.pop()
+                            temp_array_word.pop()
+                            temp_array_word.append(word_1[k-1] + word_1[k])
+
+
+                    elif (word_1[k-1] + word_1[k] in two_character_phonemes):
                         temp_array_word.pop()
                         temp_array_word.pop()
                         temp_array_word.append(word_1[k-1] + word_1[k])
-
-
-                elif (word_1[k-1] + word_1[k] in two_character_phonemes):
-                    temp_array_word.pop()
-                    temp_array_word.pop()
-                    temp_array_word.append(word_1[k-1] + word_1[k])
-            
-            words[i].IPA_LIST = temp_array_word
+                
+                words[i].IPA_LIST = temp_array_word
         
         
         # Create an edge between the nodes in the edgelists and null, and vice versa
         for k in range(0, len(words)):
-            word_1 = words[k].IPA_LIST
-            word_1_nlp = nlp(words[k].WORD)
-            for token in word_1_nlp:
-                word_1_lemma = str(token.lemma_).strip()
+            if words[k].WORD in G.nodes():
+                word_1 = words[k].IPA_LIST
+                word_1_nlp = nlp(words[k].WORD)
+                for token in word_1_nlp:
+                    word_1_lemma = str(token.lemma_).strip()
 
-            # Check basic condition first
-            if textdistance.levenshtein.distance(word_1, missing_word_list) == 1 and (word_2_lemma != word_1_lemma):
-                # Check if both are irregular
-                if (words[k].WORD not in irregular_words) or (missing_word not in irregular_words):
-                    # return_string = return_string + words[j].WORD + " "
-                    nx.add_edge(words[k].WORD, missing_word)
-                    nx.add_edge(missing_word, words[k].WORD)
-                    
+                # Check basic condition first
+                if textdistance.levenshtein.distance(word_1, missing_word_list) == 1 and (word_2_lemma != word_1_lemma):
+                    # Check if both are irregular
+                    if (words[k].WORD not in irregular_words) or (missing_word not in irregular_words):
+                        # return_string = return_string + words[j].WORD + " "
+                        nx.add_edge(words[k].WORD, missing_word)
+                        nx.add_edge(missing_word, words[k].WORD)
+                        
 
-                # If both irregular then check irregular dictionary
-                elif missing_word not in irregular_words[words[k].WORD]:
-                    # return_string = return_string + words[j].WORD + " "
-                    nx.add_edge(words[k].WORD, missing_word)
-                    nx.add_edge(missing_word, words[k].WORD)
+                    # If both irregular then check irregular dictionary
+                    elif missing_word not in irregular_words[words[k].WORD]:
+                        # return_string = return_string + words[j].WORD + " "
+                        nx.add_edge(words[k].WORD, missing_word)
+                        nx.add_edge(missing_word, words[k].WORD)
 
         
     
