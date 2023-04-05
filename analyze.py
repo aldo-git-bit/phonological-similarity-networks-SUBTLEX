@@ -17,6 +17,14 @@ class Words:
         self.IPA_LIST = IPA_LIST
 
 
+class WordsFreq:
+    def __init__(self, WORD, IPA, IPA_LIST, FREQ):
+        self.WORD = WORD
+        self.IPA = IPA
+        self.IPA_LIST = IPA_LIST
+        self.FREQ = FREQ
+
+
 def validateWordEdgeList(edgelist):
     irregular_words = {
         "person":["people"],
@@ -561,6 +569,7 @@ def getSystemFactsWordForms(edgeLists):
         shortest_path_length_giant_component = nx.average_shortest_path_length(giant_component) # <--- slows down calculation
         
         average_clustering = nx.average_clustering(giant_component)
+        degree_assortaivity_giant = nx.degree_assortativity_coefficient(giant_component)
         degree_assortaivity = nx.degree_assortativity_coefficient(graph)
 
 
@@ -577,16 +586,21 @@ def getSystemFactsWordForms(edgeLists):
 
         average_degree = (total_degree / num_nodes)
         hetrogeneity_parameter_k = math.sqrt(average_degree) / (average_degree * average_degree)
-        table.append([num_nodes, num_edges, density, nodes_in_giant_component, islands_nodes, hermits, number_of_islands, shortest_path_length_giant_component, average_clustering, degree_assortaivity, max_degree, hetrogeneity_parameter_k])
+        table.append([num_nodes, num_edges, density, nodes_in_giant_component, islands_nodes, hermits, number_of_islands, shortest_path_length_giant_component, average_clustering, degree_assortaivity_giant, degree_assortaivity, max_degree, hetrogeneity_parameter_k])
     
-    df = pd.DataFrame(table, columns = ['Nodes', 'Links', 'Density', 'Giant Nodes', 'Islands Nodes', 'Hermits Nodes', '# of Small Islands', 'Avg Short Path Giant', 'Average Clustering Coefficient Giant', 'Degree Assortativity', 'Max Degree', 'Heterogeneity Parameter K'], index=edgeLists)
+    df = pd.DataFrame(table, columns = ['Nodes', 'Links', 'Density', 'Giant Nodes', 'Islands Nodes', 'Hermits Nodes', '# of Small Islands', 'Avg Short Path Giant', 'Average Clustering Coefficient Giant', 'Degree Assortativity Giant', 'Degree Assortativity', 'Max Degree', 'Heterogeneity Parameter K'], index=edgeLists)
     pd.set_option("display.max_columns", None)
     pd.set_option("display.max_rows", None)
     pd.set_option('display.width', 350)
     print(df)
     f = open("System-Facts-WF.txt", "w+")
     f.write(str(df))
-    f.close()    
+    f.close()
+    print("\n \n ")
+    clustering_coeff = nx.clustering(giant_component,giant_component.nodes())
+    print(sum(clustering_coeff.values()) / len(giant_component.nodes()))
+    print(average_clustering)
+
 
 
 def getSystemFactsLemmas(edgeLists):
@@ -692,6 +706,35 @@ def getWordFacts(edgelist, list_of_words):
 
 
 
+def degree_histograph(edgeLists):
+    for i in edgeLists:
+        words_freq = []
+        graph = validateWordEdgeList(i)
+        y_axis = []
+        df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+        for j in range(len(df['Word'])):
+                if str(df['Word'][j]).strip() in graph.nodes():
+                    WORD = str(df['Word'][j]).strip()
+                    IPA = str(df['IPA'][j]).strip()
+                    IPA_LIST = str(df['IPA-List'][j]).strip().split()
+                    FREQ = int(df['FREQcount'][j])
+                    words_freq.append(FREQ)
+        if i in ['words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist']:
+            words_freq.append(27)
+        
+        for k in range(0,len(words_freq)):
+            y_axis.append(k)
+        # words_freq.sort(key=lambda x: x.FREQ, reverse=True)
+        words_freq.sort(reverse = True)
+        plt.scatter(y_axis, words_freq)
+        plt.savefig(f"Degree-Graph-{i}.png")
+
+        
+
+
+        
+
+
 # filename = input("Enter the path of your adjancey list: ")
 # words = input("Enter the path of your xlsx word list: ")
 
@@ -705,11 +748,17 @@ def getWordFacts(edgelist, list_of_words):
 # getSystemFacts(['lemma_words1024.adjlist', 'lemma_words2048.adjlist', 'lemma_words4096.adjlist', 'lemma_words8192.adjlist', 'lemma_words16384.adjlist', 'lemma_words19839.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist'])
 
 # graph = validate('words74286.adjlist')
-
+"""
 getSystemFactsWordForms(['words1024.adjlist', 'words2048.adjlist', 'words4096.adjlist', 'words8192.adjlist', 'words16384.adjlist', 'words19839.adjlist', 'words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist'])
 print("\n")
 getSystemFactsLemmas(['lemma_words1024.adjlist', 'lemma_words2048.adjlist', 'lemma_words4096.adjlist', 'lemma_words8192.adjlist', 'lemma_words16384.adjlist', 'lemma_words19839.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist'])
+"""
+"""
+getSystemFactsWordForms(['words250.adjlist'])
+"""
 
+degree_histograph(['words1024.adjlist', 'words2048.adjlist', 'words4096.adjlist', 'words8192.adjlist', 'words16384.adjlist', 'words19839.adjlist', 'words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist'])
+degree_histograph(['lemma_words1024.adjlist', 'lemma_words2048.adjlist', 'lemma_words4096.adjlist', 'lemma_words8192.adjlist', 'lemma_words16384.adjlist', 'lemma_words19839.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist'])
 
 
 # df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
