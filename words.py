@@ -71,7 +71,7 @@ def add_words_to_list_from_file(words):
 # This uses the original SUBTLEX File and generates IPA transcriptions for each word then adds it to our dataset
 # ~12 hours to run
 def add_words_to_list(words):
-    df = pd.read_excel('pocketparse-copy.xlsx')
+    df = pd.read_excel('pocketparse-copy.xls')
     for i in range(len(df['Word'])):
         WORD = str(df['Word'][i]).strip()
         IPA = str(ipa.convert(WORD)).strip()

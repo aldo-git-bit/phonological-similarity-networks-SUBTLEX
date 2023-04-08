@@ -6,15 +6,15 @@ def print_global():
 
 
 def create_file():
-    subtlex = pd.read_excel('pocketparse.xlsx')
+    subtlex = pd.read_excel('pocketparse.xls')
     new_data = subtlex.iloc[:, [0,1]]
-    new_data.to_excel('pocketparse-copy.xlsx', index=True, header=True)
+    new_data.to_excel('pocketparse-copy.xls', index=True, header=True)
 
 
 def update_file(words):
     y = 2
-    subtlex = pd.read_excel('pocketparse-copy.xlsx')
-    workbook = openpyxl.load_workbook('pocketparse-copy.xlsx')
+    subtlex = pd.read_excel('pocketparse-copy.xls')
+    workbook = openpyxl.load_workbook('pocketparse-copy.xls')
     worksheet_LM = workbook.worksheets[0]
     worksheet_M = workbook.worksheets[0]
 
@@ -40,5 +40,5 @@ def update_file(words):
         cell_to_writeM.value = ipa_list_str
         y += 1
     
-    workbook.save('pocketparse-copy.xlsx')
+    workbook.save('pocketparse-copy.xls')
 
