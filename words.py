@@ -9,11 +9,10 @@ import random
 # Word object that stores the word itself, IPA translation, IPA in List formation and FREQCount
 # Freqcount and word are provided by SUBTLEX
 class Words:
-    def __init__(self, WORD, IPA, IPA_LIST, FREQcount):
+    def __init__(self, WORD, IPA, IPA_LIST):
         self.WORD = WORD
         self.IPA = IPA
         self.IPA_LIST = IPA_LIST
-        self.FREQcount = FREQcount
 
 # This is for updating the dataset. If you are not selecting all words to examine it will trim words below the median by half
 # Once we cannot half our dataset, words will randomly be removed from the 2nd half of the list until we get our desired size
@@ -72,7 +71,7 @@ def add_words_to_list_from_file(words):
 # This uses the original SUBTLEX File and generates IPA transcriptions for each word then adds it to our dataset
 # ~12 hours to run
 def add_words_to_list(words):
-    df = pd.read_excel('SUBTLEX-US-Copy.xlsx')
+    df = pd.read_excel('pocketparse-copy.xlsx')
     for i in range(len(df['Word'])):
         WORD = str(df['Word'][i]).strip()
         IPA = str(ipa.convert(WORD)).strip()
@@ -95,8 +94,7 @@ def add_words_to_list(words):
         #     IPA = lines[0][1:].replace(" ", "")
         #     IPA = IPA.replace(">", " ")
         #     IPA = IPA.strip()
-        FREQcount = int(df['FREQcount'][i])
-        words.append(Words(WORD, IPA, list(IPA), FREQcount))
+        words.append(Words(WORD, IPA, list(IPA)))
 
 #Some Phonetic transcriptions are two characters. This combines the characters as one entity in our IPA_LIST
 def update_ipa(words):

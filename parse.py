@@ -6,15 +6,15 @@ def print_global():
 
 
 def create_file():
-    subtlex = pd.read_excel('SUBTLEX-US frequency list with PoS information.xlsx')
-    new_data = subtlex.iloc[:, [0,1,2,3,4,5,6,7,8,9,10,11,12,13]]
-    new_data.to_excel('SUBTLEX-US-Copy.xlsx', index=True, header=True)
+    subtlex = pd.read_excel('pocketparse.xlsx')
+    new_data = subtlex.iloc[:, [0,1]]
+    new_data.to_excel('pocketparse-copy.xlsx', index=True, header=True)
 
 
 def update_file(words):
     y = 2
-    subtlex = pd.read_excel('SUBTLEX-US-Copy.xlsx')
-    workbook = openpyxl.load_workbook('SUBTLEX-US-Copy.xlsx')
+    subtlex = pd.read_excel('pocketparse-copy.xlsx')
+    workbook = openpyxl.load_workbook('pocketparse-copy.xlsx')
     worksheet_LM = workbook.worksheets[0]
     worksheet_M = workbook.worksheets[0]
 
@@ -40,5 +40,5 @@ def update_file(words):
         cell_to_writeM.value = ipa_list_str
         y += 1
     
-    workbook.save('SUBTLEX-US-Copy.xlsx')
+    workbook.save('pocketparse-copy.xlsx')
 
