@@ -448,12 +448,12 @@ def number_of_lemmas(words, blank_array):
 
 def create_adjanceylist(size, words):
     counter = 0
-    filename = f"words{size}.adjlist"
-    filename_ipa = f"wordsIPA{size}.adjlist"
+    filename = f"wordsHML{size}.adjlist"
+    filename_ipa = f"wordsHMLIPA{size}.adjlist"
     while os.path.isfile(filename):
         counter += 1
-        filename = f"words{size}_{counter}.adjlist"
-        filename_ipa = f"wordsIPA{size}_{counter}.adjlist"
+        filename = f"wordsHML{size}_{counter}.adjlist"
+        filename_ipa = f"wordsHMLIPA{size}_{counter}.adjlist"
 
     f = open(filename, "w+")
     g = open(filename_ipa, "w+")
