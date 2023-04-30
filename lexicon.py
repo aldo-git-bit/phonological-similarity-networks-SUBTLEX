@@ -68,6 +68,7 @@ def create_lexicon():
     col = 0
 
     for i in words:
+        print(i.WORD)
         worksheet.write(row,col, i.WORD)
         worksheet.write(row,col+1,i.IPA)
         worksheet.write(row,col+1,i.FREQcount)
