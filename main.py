@@ -14,7 +14,7 @@ if __name__ == "__main__":
     dataset = []
     create_file()
     add_words_to_list(dataset)
-    update_file()
+    update_file(dataset)
     update_ipa(dataset)
     filename = create_adjanceylist(19839,dataset)
 
