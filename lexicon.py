@@ -43,7 +43,7 @@ def update_ipa(words):
 def create_lexicon():
     dic = pyphen.Pyphen(lang='en_US')
     words = []
-    sections = ["Word", "IPA", "FREQcount", "Dom Pos", "Syllable-ENG-To-IPA", "Syllable-Pyphen","DIFF"]
+    sections = ["Word", "IPA","Pyphen", "FREQcount", "Dom Pos", "Syllable-ENG-To-IPA", "Syllable-Pyphen","DIFF"]
     graph = nx.read_adjlist("lemma_words19839.adjlist") #for words in adjlist
     df = pd.read_excel('SUBTLEX-US-Copy.xlsx') #get all information in SUBLEX-US that relates to adjlist
     for i in range(len(df['Word'])):
@@ -71,10 +71,11 @@ def create_lexicon():
         print(i.WORD)
         worksheet.write(row,col, i.WORD)
         worksheet.write(row,col+1,i.IPA)
-        worksheet.write(row,col+2,i.FREQcount)
-        worksheet.write(row,col+3,i.POS)
-        worksheet.write(row,col+4,ipa.syllable_count(i.WORD))
-        worksheet.write(row,col+5,len(str(dic.inserted(i.WORD)).split('\u002D')))
+        worksheet.write(row,col+2,dic.inserted(i.WORD))
+        worksheet.write(row,col+3,i.FREQcount)
+        worksheet.write(row,col+4,i.POS)
+        worksheet.write(row,col+5,ipa.syllable_count(i.WORD))
+        worksheet.write(row,col+6,len(str(dic.inserted(i.WORD)).split('\u002D')))
         if (ipa.syllable_count(i.WORD) != 0) and (ipa.syllable_count(i.WORD) != len(str(dic.inserted(i.WORD)).split('\u002D'))):
             worksheet.write(row,col+6,"Y")
         row += 1
