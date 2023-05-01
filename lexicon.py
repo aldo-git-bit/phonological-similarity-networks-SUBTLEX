@@ -75,7 +75,7 @@ def create_lexicon():
         worksheet.write(row,col+3,i.POS)
         worksheet.write(row,col+4,ipa.syllable_count(i.WORD))
         worksheet.write(row,col+5,len(str(dic.inserted(i.WORD)).split('\u002D')))
-        if (ipa.syllable_count(i.WORD) != 0) and (ipa.syllable_count != len(str(dic.inserted(i.WORD)).split('\u002D'))):
+        if (ipa.syllable_count(i.WORD) != 0) and (ipa.syllable_count(i.WORD) != len(str(dic.inserted(i.WORD)).split('\u002D'))):
             worksheet.write(row,col+6,"Y")
         row += 1
         col = 0
