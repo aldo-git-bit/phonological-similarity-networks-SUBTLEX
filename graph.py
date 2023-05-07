@@ -10,7 +10,7 @@ nlp = spacy.load('en_core_web_sm', disable=['parser','ner'])
 def number_of_lemmas(words, blank_array):
     irregular_words = {
         "person":["people"],
-        "person":["people"],
+        "people":["person"],
         "ox":["oxen"],
         "oxen":["ox"],
         "man":["men"],
@@ -111,6 +111,7 @@ def number_of_lemmas(words, blank_array):
         "bought":["buy"],
         "can":["could"],
         "could":["can"],
+        "cast": ["cast"],
         "catch":["caught"],
         "caught":["catch"],
         "choose":["chose", "chosen"],
@@ -120,8 +121,10 @@ def number_of_lemmas(words, blank_array):
         "clung":["cling"],
         "come":["came"],
         "came":["come"],
+        "cost":["cost"],
         "creep":["crept"],
         "crept":["creep"],
+        "cost":["cost"],
         "deal":["dealt"],
         "dealt":["deal"],
         "dig":["dug"],
@@ -426,23 +429,25 @@ def number_of_lemmas(words, blank_array):
 
     }
     for i in range(0, len(words)):
-        in_array = False
         # word_1_nlp = nlp(words[i].WORD)
         word_1_nlp = nlp(words[i])
         for token in word_1_nlp:
             word_1_lemma = str(token.lemma_).strip()
         
+
         if word_1_lemma in irregular_words:
-            for j in irregular_words[word_1_lemma]:
+            for j in irregular_words:
                 if j in blank_array:
-                    in_array = True
                     break
-
-            if not in_array:
-                blank_array.append(words[i])
-
-        elif word_1_lemma not in blank_array:
             blank_array.append(words[i])
+
+
+        elif (word_1_lemma not in blank_array):
+            if ((word_1_lemma != words[i]) and (word_1_lemma in words) and (word_1_lemma not in blank_array)):
+                blank_array.append(word_1_lemma)
+
+        elif ((word_1_lemma != words[i]) and (word_1_lemma not in words) and (words[i] not in blank_array)):
+                blank_array.append(words[i])
 
 
             
