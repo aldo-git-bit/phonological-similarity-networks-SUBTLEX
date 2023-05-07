@@ -427,7 +427,8 @@ def number_of_lemmas(words, blank_array):
     }
     for i in range(0, len(words)):
         in_array = False
-        word_1_nlp = nlp(words[i].WORD)
+        # word_1_nlp = nlp(words[i].WORD)
+        word_1_nlp = nlp(words[i])
         for token in word_1_nlp:
             word_1_lemma = str(token.lemma_).strip()
         
