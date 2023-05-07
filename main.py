@@ -48,7 +48,7 @@ if __name__ == "__main__":
     
     
     #Run program here based on arguments
-    else:
+    # else:
 
         subtlex_dataset = ["dogs", "that", "people", "person"]
         lemmas = []
