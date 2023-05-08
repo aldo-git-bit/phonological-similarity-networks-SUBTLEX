@@ -9,7 +9,7 @@ import eng_to_ipa as ipa
 import subprocess
 import jellyfish
 import concurrent.futures
-
+import xlsxwriter
 
 def subtlex_file_error(error):
     print("Error: Expected a value of True or False. Got {error}")
@@ -46,30 +46,26 @@ if __name__ == "__main__":
     # elif args.lemmawords.lower().strip() == 'wordforms' and (args.size <= 0 or args.size >= 74288 ):
     #     word_size_error(args.size)
     
-    
-    #Run program here based on arguments
-    # else:
+
+        #li = [Words("person", "1"), Words("people", "2"), Words("dog", "1"), Words("dogs", "2")]        
+     lemmas = []
+     subtlex_dataset = []
+     add_words_to_list_from_file(subtlex_dataset)
+     print(len(subtlex_dataset))
+     number_of_lemmas(subtlex_dataset, lemmas)
+     print(len(lemmas))
+     row = 0
+     col = 0
+     workbook = xlsxwriter.Workbook('New-Lemmas.xlsx')
+     worksheet = workbook.add_worksheet("Sheet1")
+     for i in range(0, len(lemmas)):
+         worksheet.write(row, col, lemmas[i].WORD)
+         row += 1
+         col += 1
+     workbook.close()
+     
         
-        class Words:
-            def __init__(self, WORD, IPA):
-                self.WORD = WORD
-                self.IPA = IPA
 
-        li = [Words("person", "1"), Words("people", "2"), Words("that", "1"), Words("thats", "2")]        
-        lemmas = []
-
-        number_of_lemmas(li, lemmas)
-        for i in lemmas:
-            print(f"{i.WORD} {i.IPA}")
-        
-
-        """
-        subtlex_dataset = ["ring", "rung", "rang"]        
-        lemmas = []
-
-        number_of_lemmas(subtlex_dataset, lemmas)
-        print(lemmas)
-"""
         # if args.edgelist is not None and os.path.isfile(args.edgelist):
         #     create_graph(args.edgelist)
         
@@ -93,5 +89,5 @@ if __name__ == "__main__":
         #     update_list(args.size, subtlex_dataset)
         #     update_ipa(subtlex_dataset)
         #     filename = create_adjanceylist(args.size, subtlex_dataset)
-            
+
 
