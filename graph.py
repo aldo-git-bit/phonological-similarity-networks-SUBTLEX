@@ -8,6 +8,11 @@ import os
 nlp = spacy.load('en_core_web_sm', disable=['parser','ner'])
 
 def number_of_lemmas(words, blank_array):
+    temp_array = []
+    words_wordsonly = []
+    for i in range(0, len(words)):
+        words_wordsonly.append(words[i].WORD)
+
     irregular_words = {
         "person":["people"],
         "people":["person"],
@@ -431,37 +436,50 @@ def number_of_lemmas(words, blank_array):
     for i in range(0, len(words)):
         word_not_added = True
         lemma_words = []
-        # word_1_nlp = nlp(words[i].WORD)
-        word_1_nlp = nlp(words[i])
+        word_1_nlp = nlp(words[i].WORD)
         for token in word_1_nlp:
             word_1_lemma = str(token.lemma_).strip()
             lemma_words.append(word_1_lemma)
-        print(f"{words[i]} and lemma is {word_1_lemma}")
+        
         words_not_added = True
         not_in_array = True
+        
         for k in lemma_words:
-            if ((k in irregular_words) and (words_not_added)):
+            if k in temp_array:
+                not_in_array = False
+                words_not_added = False
+            
+            elif ((k in irregular_words) and (words_not_added)):
                 for j in irregular_words[k]:
-                    if j in blank_array:
+                    if j in temp_array:
                         not_in_array = False
                         break
 
-                if (k not in blank_array) and (k in words) and (not_in_array):
-                    print("-----")
-                    blank_array.append(k)
-                    words_not_added = False
+                if (k not in temp_array) and (k in words_wordsonly) and (not_in_array):
+                    temp_array.append(k)
+                    for l in range(0, len(words)):
+                        if words[l].WORD == k:
+                            blank_array.append(words[l])
+                            words_not_added = False
+                            break
 
-            elif ((k in words) and (words_not_added)):
-                if (words[i] not in blank_array) and (k not in blank_array):
-                    if words[i] != word_1_lemma: 
-                        blank_array.append(k)
-                        words_not_added = False
+            elif ((k in words_wordsonly) and (words_not_added)):
+                if (words[i].WORD not in temp_array) and (k not in temp_array):
+                    if words[i].WORD != word_1_lemma:
+                        temp_array.append(k)
+                        for l in range(0, len(words)):
+                            if words[l].WORD == k:
+                                blank_array.append(words[l])
+                                words_not_added = False
+                                break
                     else:
+                        temp_array.append(words[i].WORD)
                         blank_array.append(words[i])
                         words_not_added = False
 
-            elif ((k not in words) and (words_not_added)):
-                if words[i] not in blank_array:
+            elif ((k not in words_wordsonly) and (words_not_added)):
+                if words[i].WORD  not in temp_array:
+                    temp_array.append(words[i].WORD)
                     blank_array.append(words[i])
                     words_not_added = False
     

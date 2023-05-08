@@ -49,12 +49,27 @@ if __name__ == "__main__":
     
     #Run program here based on arguments
     # else:
+        
+        class Words:
+            def __init__(self, WORD, IPA):
+                self.WORD = WORD
+                self.IPA = IPA
+
+        li = [Words("person", "1"), Words("people", "2"), Words("that", "1"), Words("thats", "2")]        
+        lemmas = []
+
+        number_of_lemmas(li, lemmas)
+        for i in lemmas:
+            print(f"{i.WORD} {i.IPA}")
+        
+
+        """
         subtlex_dataset = ["ring", "rung", "rang"]        
         lemmas = []
 
         number_of_lemmas(subtlex_dataset, lemmas)
         print(lemmas)
-
+"""
         # if args.edgelist is not None and os.path.isfile(args.edgelist):
         #     create_graph(args.edgelist)
         
