@@ -429,27 +429,42 @@ def number_of_lemmas(words, blank_array):
 
     }
     for i in range(0, len(words)):
+        word_not_added = True
+        lemma_words = []
         # word_1_nlp = nlp(words[i].WORD)
         word_1_nlp = nlp(words[i])
         for token in word_1_nlp:
             word_1_lemma = str(token.lemma_).strip()
-        
+            lemma_words.append(word_1_lemma)
+        print(f"{words[i]} and lemma is {word_1_lemma}")
+        words_not_added = True
+        not_in_array = True
+        for k in lemma_words:
+            if ((k in irregular_words) and (words_not_added)):
+                for j in irregular_words[k]:
+                    if j in blank_array:
+                        not_in_array = False
+                        break
 
-        if word_1_lemma in irregular_words:
-            for j in irregular_words:
-                if j in blank_array:
-                    break
-            blank_array.append(words[i])
+                if (k not in blank_array) and (k in words) and (not_in_array):
+                    print("-----")
+                    blank_array.append(k)
+                    words_not_added = False
 
+            elif ((k in words) and (words_not_added)):
+                if (words[i] not in blank_array) and (k not in blank_array):
+                    if words[i] != word_1_lemma: 
+                        blank_array.append(k)
+                        words_not_added = False
+                    else:
+                        blank_array.append(words[i])
+                        words_not_added = False
 
-        elif (word_1_lemma not in blank_array):
-            if ((word_1_lemma != words[i]) and (word_1_lemma in words) and (word_1_lemma not in blank_array)):
-                blank_array.append(word_1_lemma)
-
-        elif ((word_1_lemma != words[i]) and (word_1_lemma not in words) and (words[i] not in blank_array)):
-                blank_array.append(words[i])
-
-
+            elif ((k not in words) and (words_not_added)):
+                if words[i] not in blank_array:
+                    blank_array.append(words[i])
+                    words_not_added = False
+    
             
 
 def create_adjanceylist(size, words):

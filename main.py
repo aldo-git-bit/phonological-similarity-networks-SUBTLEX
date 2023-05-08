@@ -49,8 +49,7 @@ if __name__ == "__main__":
     
     #Run program here based on arguments
     # else:
-
-        subtlex_dataset = ["dogs", "that", "people", "person"]
+        subtlex_dataset = ["ring", "rung", "rang"]        
         lemmas = []
 
         number_of_lemmas(subtlex_dataset, lemmas)
