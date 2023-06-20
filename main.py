@@ -25,68 +25,73 @@ def word_size_error(error):
 
 
 if __name__ == "__main__":  
-    # parser = argparse.ArgumentParser(description = 'Parametres')
+     parser = argparse.ArgumentParser(description = 'Parametres')
 
-    # parser.add_argument('-sf','--subtlexfile', type = str, metavar = '', help = 'Do you have the IPA Subtlex File (True/False)', required=True)
-    # parser.add_argument('-lw', '--lemmawords', type = str, metavar = '', help = 'Specify whether you wanted to use "lemma" or "wordforms" ', required=True)
-    # parser.add_argument('-size', '--size', type = int, metavar = '', help = "Size of Adjancey List", required=True)
-    # args = parser.parse_args()
+     parser.add_argument('-sf','--subtlexfile', type = str, metavar = '', help = 'Do you have the IPA Subtlex File (True/False)', required=True)
+     parser.add_argument('-lw', '--lemmawords', type = str, metavar = '', help = 'Specify whether you wanted to use "lemma" or "wordforms" ', required=True)
+     parser.add_argument('-size', '--size', type = int, metavar = '', help = "Size of Adjancey List", required=True)
+     args = parser.parse_args()
     
     
     # Check conditions 
-    # if args.subtlexfile.lower().strip() not in ['f', 'false', 't', 'true']:
-    #     subtlex_file_error(args.subtlexfile)
+     if args.subtlexfile.lower().strip() not in ['f', 'false', 't', 'true']:
+         subtlex_file_error(args.subtlexfile)
     
-    # elif args.lemmawords.lower().strip() not in ['lemma', 'wordforms']:
-    #     lemma_wordforms_error(args.lemmawords)
+     elif args.lemmawords.lower().strip() not in ['lemma', 'wordforms']:
+         lemma_wordforms_error(args.lemmawords)
     
-    # elif args.lemmawords.lower().strip() == 'lemma' and (args.size <= 0 or args.size >= 51229 ):
-    #     lemma_size_error(args.size)
+     elif args.lemmawords.lower().strip() == 'lemma' and (args.size <= 0 or args.size >= 51229 ):
+         lemma_size_error(args.size)
     
-    # elif args.lemmawords.lower().strip() == 'wordforms' and (args.size <= 0 or args.size >= 74288 ):
-    #     word_size_error(args.size)
+     elif args.lemmawords.lower().strip() == 'wordforms' and (args.size <= 0 or args.size >= 74288 ):
+         word_size_error(args.size)
+     
+    #  class Words:
+    #     def __init__(self, WORD, IPA):
+    #          self.WORD = WORD
+    #          self.IPA = IPA
+    # lemmas = []
+    # li = [Words("empty", "1"), Words("emptiest", "2")]        
+    # number_of_lemmas(li, lemmas)
     
-
-        #li = [Words("person", "1"), Words("people", "2"), Words("dog", "1"), Words("dogs", "2")]        
      lemmas = []
      subtlex_dataset = []
-     add_words_to_list_from_file(subtlex_dataset)
-     print(len(subtlex_dataset))
-     number_of_lemmas(subtlex_dataset, lemmas)
-     print(len(lemmas))
-     row = 0
-     col = 0
-     workbook = xlsxwriter.Workbook('New-Lemmas.xlsx')
-     worksheet = workbook.add_worksheet("Sheet1")
-     for i in range(0, len(lemmas)):
-         worksheet.write(row, col, lemmas[i].WORD)
-         row += 1
-     workbook.close()
+    #  add_words_to_list_from_file(subtlex_dataset)
+    #   print(len(subtlex_dataset))
+    #  number_of_lemmas(subtlex_dataset, lemmas)
+    #  print(len(lemmas))
+    #  row = 0
+    #  col = 0
+    #  workbook = xlsxwriter.Workbook('New-Lemmas.xlsx')
+    #  worksheet = workbook.add_worksheet("Sheet1")
      
-        
-
-        # if args.edgelist is not None and os.path.isfile(args.edgelist):
-        #     create_graph(args.edgelist)
-        
-        # elif args.subtlexfile.lower().strip() in ['t', 'true']:
-        #     add_words_to_list_from_file(subtlex_dataset)
-        #     print(f"THIS IS LEN OF DATASET {len(subtlex_dataset)}")
-        # else:
-        #     create_file()
-        #     add_words_to_list(subtlex_dataset)
-        #     update_file()
+    #  for i in range(0, len(lemmas)):
+    #     worksheet.write(row, col, lemmas[i].WORD)
+    #     row += 1
+   #  workbook.close()
     
-        # if args.lemmawords.lower().strip() =='lemma':
-        #     number_of_lemmas(subtlex_dataset, lemmas)
-        #     print(f"Number of m lemmas {len(lemmas)}")
-        #     update_list(args.size, lemmas)
-        #     update_ipa(lemmas)
-        #     filename = create_adjanceylist_lemma(args.size, lemmas)
-            
         
-        # else:
-        #     update_list(args.size, subtlex_dataset)
-        #     update_ipa(subtlex_dataset)
-        #     filename = create_adjanceylist(args.size, subtlex_dataset)
 
-
+    #  if args.edgelist is not None and os.path.isfile(args.edgelist):
+      #   create_graph(args.edgelist)
+        
+     if args.subtlexfile.lower().strip() in ['t', 'true']:
+         add_words_to_list_from_file(subtlex_dataset)
+         print(f"THIS IS LEN OF DATASET {len(subtlex_dataset)}")
+     
+     else:
+        create_file()
+        add_words_to_list(subtlex_dataset)
+        update_file()
+    
+     if args.lemmawords.lower().strip() =='lemma':
+        number_of_lemmas(subtlex_dataset, lemmas)
+        print(f"Number of m lemmas {len(lemmas)}")
+        update_list(args.size, lemmas)
+        update_ipa(lemmas)
+        filename = create_adjanceylist_lemma(args.size, lemmas)
+            
+     else:
+        update_list(args.size, subtlex_dataset)
+        update_ipa(subtlex_dataset)
+        filename = create_adjanceylist(args.size, subtlex_dataset)

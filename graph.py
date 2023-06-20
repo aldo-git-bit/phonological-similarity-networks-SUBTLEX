@@ -4,9 +4,10 @@ import textdistance
 import spacy
 import globals 
 import os
+# import en_core_web_trf # added this afterwards
 
-nlp = spacy.load('en_core_web_sm', disable=['parser','ner'])
-
+# nlp = spacy.load('en_core_web_trf', disable=['parser','ner']) #replaced sm with trf
+nlp = spacy.load('en_core_web_sm')
 def number_of_lemmas(words, blank_array):
     temp_array = []
     words_wordsonly = []
@@ -433,6 +434,7 @@ def number_of_lemmas(words, blank_array):
         "written":["write","wrote"]
 
     }
+    nlp = spacy.load("en_core_web_sm") #added to see if ibetter
     for i in range(0, len(words)):
         word_not_added = True
         lemma_words = []
@@ -445,6 +447,7 @@ def number_of_lemmas(words, blank_array):
         not_in_array = True
         
         for k in lemma_words:
+            # print(f"Word is {words[i].WORD} Lemma is {k}")
             if k in temp_array:
                 not_in_array = False
                 words_not_added = False
