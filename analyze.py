@@ -448,7 +448,7 @@ def validateWordEdgeList(edgelist):
     }
     graph = nx.read_adjlist(edgelist)
     # if statement to run this only when we use "null" in larger datasets
-    if edgelist in ['words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist']:
+    if edgelist in ['words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist', 'lemma_words32768_1.adjlist']:
         nlp = spacy.load('en_core_web_sm', disable=['parser','ner'])
         # Missing word information ---------
         missing_word = "null"
@@ -593,7 +593,7 @@ def getSystemFactsWordForms(edgeLists):
     pd.set_option("display.max_rows", None)
     pd.set_option('display.width', 350)
     print(df)
-    f = open("System-Facts-WF.txt", "w+")
+    f = open("System-Facts-WF-New.txt", "w+")
     f.write(str(df))
     f.close()
     print("\n \n ")
@@ -653,7 +653,7 @@ def getSystemFactsLemmas(edgeLists):
     pd.set_option("display.max_rows", None)
     pd.set_option('display.width', 350)
     print(df)
-    f = open("System-Facts-Lemma.txt", "w+")
+    f = open("System-Facts-Lemma-New.txt", "w+")
     f.write(str(df))
     f.close()  
 
@@ -748,11 +748,14 @@ def degree_histograph(edgeLists):
 # getSystemFacts(['lemma_words1024.adjlist', 'lemma_words2048.adjlist', 'lemma_words4096.adjlist', 'lemma_words8192.adjlist', 'lemma_words16384.adjlist', 'lemma_words19839.adjlist', 'lemma_words32768.adjlist', 'lemma_words51228.adjlist'])
 
 # graph = validate('words74286.adjlist')
-"""
+
 getSystemFactsWordForms(['words1024.adjlist', 'words2048.adjlist', 'words4096.adjlist', 'words8192.adjlist', 'words16384.adjlist', 'words19839.adjlist', 'words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist'])
 print("\n")
-"""
-getSystemFactsWordForms(['words74286.adjlist'])
+getSystemFactsLemmas(['lemma_words1024_3.adjlist', 'lemma_words2048_3.adjlist', 'lemma_words4096_2.adjlist', 'lemma_words8192_1.adjlist', 'lemma_words16384_1.adjlist', 'lemma_words19839_1.adjlist', 'lemma_words32768_1.adjlist'])
+
+
+
+# getSystemFactsWordForms(['words74286.adjlist'])
 
 """
 getSystemFactsWordForms(['words250.adjlist'])
