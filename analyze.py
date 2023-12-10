@@ -751,7 +751,7 @@ def degree_histograph(edgeLists):
 
 getSystemFactsWordForms(['words1024.adjlist', 'words2048.adjlist', 'words4096.adjlist', 'words8192.adjlist', 'words16384.adjlist', 'words19839.adjlist', 'words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist'])
 print("\n")
-getSystemFactsLemmas(['lemma_words1024_3.adjlist', 'lemma_words2048_3.adjlist', 'lemma_words4096_2.adjlist', 'lemma_words8192_1.adjlist', 'lemma_words16384_1.adjlist', 'lemma_words19839_1.adjlist', 'lemma_words32768_1.adjlist'])
+getSystemFactsLemmas(['lemma_words1024_3.adjlist', 'lemma_words2048_3.adjlist', 'lemma_words4096_2.adjlist', 'lemma_words8192_1.adjlist', 'lemma_words16384_1.adjlist', 'lemma_words19839_1.adjlist', 'lemma_words32768_1.adjlist','lemma_words49690.adjlist'])
 
 
 
