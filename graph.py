@@ -4,13 +4,19 @@ import textdistance
 import spacy
 import globals 
 import os
+# import en_core_web_trf # added this afterwards
 
-nlp = spacy.load('en_core_web_sm', disable=['parser','ner'])
-
+# nlp = spacy.load('en_core_web_trf', disable=['parser','ner']) #replaced sm with trf
+nlp = spacy.load('en_core_web_sm')
 def number_of_lemmas(words, blank_array):
+    temp_array = []
+    words_wordsonly = []
+    for i in range(0, len(words)):
+        words_wordsonly.append(words[i].WORD)
+
     irregular_words = {
         "person":["people"],
-        "person":["people"],
+        "people":["person"],
         "ox":["oxen"],
         "oxen":["ox"],
         "man":["men"],
@@ -111,6 +117,7 @@ def number_of_lemmas(words, blank_array):
         "bought":["buy"],
         "can":["could"],
         "could":["can"],
+        "cast": ["cast"],
         "catch":["caught"],
         "caught":["catch"],
         "choose":["chose", "chosen"],
@@ -120,8 +127,10 @@ def number_of_lemmas(words, blank_array):
         "clung":["cling"],
         "come":["came"],
         "came":["come"],
+        "cost":["cost"],
         "creep":["crept"],
         "crept":["creep"],
+        "cost":["cost"],
         "deal":["dealt"],
         "dealt":["deal"],
         "dig":["dug"],
@@ -425,25 +434,58 @@ def number_of_lemmas(words, blank_array):
         "written":["write","wrote"]
 
     }
+    nlp = spacy.load("en_core_web_sm") #added to see if ibetter
     for i in range(0, len(words)):
-        in_array = False
+        word_not_added = True
+        lemma_words = []
         word_1_nlp = nlp(words[i].WORD)
         for token in word_1_nlp:
             word_1_lemma = str(token.lemma_).strip()
+            lemma_words.append(word_1_lemma)
         
-        if word_1_lemma in irregular_words:
-            for j in irregular_words[word_1_lemma]:
-                if j in blank_array:
-                    in_array = True
-                    break
+        words_not_added = True
+        not_in_array = True
+        
+        for k in lemma_words:
+            # print(f"Word is {words[i].WORD} Lemma is {k}")
+            if k in temp_array:
+                not_in_array = False
+                words_not_added = False
+            
+            elif ((k in irregular_words) and (words_not_added)):
+                for j in irregular_words[k]:
+                    if j in temp_array:
+                        not_in_array = False
+                        break
 
-            if not in_array:
-                blank_array.append(words[i])
+                if (k not in temp_array) and (k in words_wordsonly) and (not_in_array):
+                    temp_array.append(k)
+                    for l in range(0, len(words)):
+                        if words[l].WORD == k:
+                            blank_array.append(words[l])
+                            words_not_added = False
+                            break
 
-        elif word_1_lemma not in blank_array:
-            blank_array.append(words[i])
+            elif ((k in words_wordsonly) and (words_not_added)):
+                if (words[i].WORD not in temp_array) and (k not in temp_array):
+                    if words[i].WORD != word_1_lemma:
+                        temp_array.append(k)
+                        for l in range(0, len(words)):
+                            if words[l].WORD == k:
+                                blank_array.append(words[l])
+                                words_not_added = False
+                                break
+                    else:
+                        temp_array.append(words[i].WORD)
+                        blank_array.append(words[i])
+                        words_not_added = False
 
-
+            elif ((k not in words_wordsonly) and (words_not_added)):
+                if words[i].WORD  not in temp_array:
+                    temp_array.append(words[i].WORD)
+                    blank_array.append(words[i])
+                    words_not_added = False
+    
             
 
 def create_adjanceylist(size, words):
