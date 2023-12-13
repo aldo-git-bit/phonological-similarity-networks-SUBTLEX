@@ -448,7 +448,7 @@ def validateWordEdgeList(edgelist):
     }
     graph = nx.read_adjlist(edgelist)
     # if statement to run this only when we use "null" in larger datasets
-    if edgelist in ['words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist', 'lemma_words32768_1.adjlist']:
+    if edgelist in ['words32768.adjlist', 'words65536.adjlist', 'words74286.adjlist']:
         nlp = spacy.load('en_core_web_sm', disable=['parser','ner'])
         # Missing word information ---------
         missing_word = "null"
