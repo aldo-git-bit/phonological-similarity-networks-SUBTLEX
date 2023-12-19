@@ -1,3 +1,65 @@
+# Open access network science: Phonological similarity networks from the SUBTLEX-US lexicon
+
+We constructed several phonological similarity networks (neighbors differ in exactly one consonant/vowel phoneme) using words from a lexicon based on the SUBTLEX-US English corpus, distinguishing networks by size and lemma vs. wordform representations. The resulting networks are shown to exhibit many familiar characteristics, including small world properties and robustness to node removal, regardless of network size and representation type. We also validated the SUBTLEX phonological networks by showing that they exhibit contrasts in degree and clustering coefficient comparable to the same contrasts found in eight prior studies. 
+
+
+## Acknowledgement
+The files with the commit message "Adding model created by LonelyRider-cs/LING4100_project" were created by github user [@LonelyRider-cs](https://github.com/LonelyRider-cs). Their model was used to generate the IPA for words when eng-to-ipa was unable to generate an IPA for a given word. 
+
+More acknowledgements are as followed: 
+
+**OpenNMT**
+```
+@inproceedings{opennmt,
+    author  = {Guillaume Klein and
+               Yoon Kim and
+               Yuntian Deng and
+               Jean Senellart and
+               Alexander M. Rush},
+  title     = {OpenNMT: Open-Source Toolkit for Neural Machine Translation},
+  booktitle = {Proc. ACL},
+  year      = {2017},
+  url       = {https://doi.org/10.18653/v1/P17-4012},
+  doi       = {10.18653/v1/P17-4012}
+}
+```
+**eng-to-ipa**
+```
+@inproceedings{English-to-IPA,
+    author  = {mphilli and
+               ValerioNeriGit and
+               Tim Van Cann and
+               Mitchellpkt},
+  title     = {Converts English text to IPA notation},
+  year      = {2019},
+  url       = {https://github.com/mphilli/English-to-IPA/tree/a17c83eadddfd5888a1078b5632860cf474a5c2d},
+}
+```
+
+
+## Getting Started
+
+In order to run the project, we used **Python 3.9** on a linux based machine. After installing Python 3.9 the user must install the following pip-libaries to set up their environment 
+
+
+
+
+```bash
+  OpenNMT-py==2.2.0
+  jellyfish==0.9.0
+  eng-to-ipa==0.0.2
+  pandas
+  textdistance
+  networkx
+  openpyxl
+  jellyfish
+  xlsxwriter
+  matplotlib
+
+```
+
+You will also need to install spacy, and download the "en_core_web_sm" file. More details can be found from spacy's [website](https://spacy.io/usage). We also recommend installing OpenNMT-py=2.2.0 first. 
+
 
 ## File Structure
 
