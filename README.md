@@ -71,6 +71,11 @@ words.py
 graph.py
 ```
 
+The following files are used to generate the summary tables and calculates the network measures for the adjlists. 
+```
+analyze.py
+```
+
 ### Main.py
 main.py takes four arguments when it is run:
 
@@ -152,3 +157,29 @@ This function generates our adjancey list for our words/lemmas and an adjancey l
 #### create_graph 
 This function generates the network in a png format / 
 **Not used**  
+
+### Analyze.py
+
+To generate the summary tables for the wordform adjlistss, add the files name onto line 752 of analyze.py, inside of the list.
+
+To generate the summary tables for the lemma adjlists, add the files names onto line 754 of analyze.py.
+
+**Note:** The adjlists must be in the same folder as the analyze.py function 
+
+
+#### validateWordEdgeList
+This function validates our adjlists, and removes any self loops, and make sures words with the same root word are not connected to each other. This function also adds in the word "null" to the graph, as it was not added by the graphs.py file. This function also returns a validated adjlist file, which should be used for all calculations.
+
+#### getSystemFactsWordForms / getSystemFactsLemmas
+Calls the validateWordEdgeList function, and returns the following: 
+- number of nodes
+- number of island nodes
+- number of hermit nodes
+- number of nodes in the giant component 
+- number of islands
+- number of links/edges
+- avg shortest path in the giant component 
+- avg clustering coefficient in the giant component 
+- degree assortativity
+- max degree
+- heterogeneity parameter K 
