@@ -1,0 +1,72 @@
+import textdistance
+import networkx as nx
+import pandas as pd
+
+class Words:
+    def __init__(self, WORD, IPA, IPA_LIST):
+        self.WORD = WORD
+        self.IPA = IPA
+        self.IPA_LIST = IPA_LIST
+
+
+def update_ipa(words):
+    two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
+    vowels = ["ɑ", "æ", "ə", "ʌ", "ɔ", "a", "aɪ", "aʊ", "ɛ", "e", "ɪ", "i", "o", "ɔ", "ʊ", "u"]
+
+    for i in range(0, len(words)):
+        word_1 = words[i].IPA_LIST
+        temp_array_word = []
+        temp_array_word.append(word_1[0])
+
+        for k in range(1, len(word_1)):
+            temp_array_word.append(word_1[k])
+
+            if (word_1[k-1] + word_1[k] == "ər") and (k != len(word_1) - 1) and (word_1[k+1] not in vowels):
+                    # print(f"{words[i].WORD}...... {word_1}.....{word_1[k+1]}")
+                    temp_array_word.pop()
+                    temp_array_word.pop()
+                    temp_array_word.append(word_1[k-1] + word_1[k])
+
+
+            elif (word_1[k-1] + word_1[k] in two_character_phonemes):
+                temp_array_word.pop()
+                temp_array_word.pop()
+                temp_array_word.append(word_1[k-1] + word_1[k])
+
+        words[i].IPA_LIST = temp_array_word
+
+subtlex_words = []
+#print(df['Word'])
+df = pd.read_excel('/content/SUBTLEX-US-Copy.xlsx')
+# df = df.sample(frac = 0.0013)
+# j = 0
+# print(df['Word'])
+
+# Original Code Below
+for i in range(len(df['Word'])):
+    WORD = str(df['Word'][i]).strip()
+    IPA = str(df['IPA'][i]).strip()
+    IPA_LIST = str(df['IPA-List'][i]).strip().split()
+    subtlex_words.append(Words(WORD, IPA, IPA_LIST))
+
+update_ipa(subtlex_words)
+# for i in range(0,100):
+#   print(subtlex_words[i].IPA_LIST)
+
+nodes_1024 = nx.read_adjlist('/content/validate-words74286.adjlist')
+nodes_1024_list = list(nodes_1024.nodes)
+removed_edges = 0
+word_counter = 0
+for i in range(0,len(subtlex_words)):
+  if subtlex_words[i].WORD in nodes_1024_list:
+    word_counter += 1
+    print(f"word '{subtlex_words[i].WORD}' in list. This is word number {word_counter}")
+    for j in range(i+1,len(subtlex_words)):
+      if subtlex_words[j].WORD in nodes_1024_list:
+         if textdistance.levenshtein.distance(subtlex_words[i].IPA_LIST, subtlex_words[j].IPA_LIST) == 1 and not nodes_1024.has_edge(subtlex_words[i].WORD,subtlex_words[j].WORD):
+          print(f"added 1 to removed edges")
+          removed_edges += 1
+
+print(removed_edges)
+
+
