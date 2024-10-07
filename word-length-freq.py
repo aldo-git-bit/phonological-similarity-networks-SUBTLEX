@@ -59,7 +59,7 @@ def add_words_to_list_from_file(words):
 def update_excel_with_ipa(words):
     df = pd.read_excel('words_giant.xlsx')
     ipa_column = [word.IPA for word in words]
-    ipa_list_column = [','.join(word.IPA_LIST) for word in words] 
+    ipa_list_column = [','.join(word.NEW_IPA_LIST) for word in words] 
     length_column = [word.LENGTH for word in words]
     df['NEW_IPA_LIST'] = ipa_list_column
     df['Word_Length'] = length_column
