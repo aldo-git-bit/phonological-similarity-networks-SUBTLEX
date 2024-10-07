@@ -188,3 +188,5 @@ Calls the validateWordEdgeList function, and returns the following:
 - degree assortativity
 - max degree
 - heterogeneity parameter K 
+
+### Further Improvements
