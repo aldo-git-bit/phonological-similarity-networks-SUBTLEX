@@ -7,27 +7,11 @@ class Words:
         self.IPA = IPA
         self.IPA_LIST = IPA_LIST
         self.FREQ = FREQ
+        self.NEW_IPA_LIST = ""
         self.LENGTH = ""
 
 
-def add_words_to_list(words):
-    df = pd.read_excel('words_giant.xlsx')
-    for i in range(len(df['word'])):
-        WORD = str(df['word'][i]).strip()
-        IPA = str(ipa.convert(WORD)).strip()
-        IPA = IPA.replace("ˈ", "")
-        IPA = IPA.replace("ˌ", "")
-        if IPA[len(IPA) - 1] == "*":
-            IPA = str(subprocess.run(['bash', 'ipa_translator.sh', WORD]))
-            with open('ipa_translation.txt') as f:
-                lines = f.readlines()
-                IPA = lines[0][1:].replace(" ", "")
-                IPA = IPA.replace(">", " ")
-                IPA = IPA.strip()
-                IPA = IPA.strip("\n")
-            
-        FREQcount = int(df['frequency'][i])
-        words.append(Words(WORD, IPA, list(IPA), FREQcount))
+
 
 def update_ipa(words):
     two_character_phonemes = ["oʊ", "ɔɪ", "aɪ", "aʊ"]
@@ -53,7 +37,7 @@ def update_ipa(words):
                 temp_array_word.pop()
                 temp_array_word.append(word_1[k-1] + word_1[k])
         
-        words[i].IPA_LIST = temp_array_word
+        words[i].NEW_IPA_LIST = temp_array_word
 
 
 
@@ -62,21 +46,29 @@ def get_length(words):
         words[i].LENGTH = len(words[i].IPA_LIST)
 
 
+def add_words_to_list_from_file(words):
+    df = pd.read_excel('words_giant.xlsx')
+    for i in range(len(df['word'])):
+        WORD = str(df['word'][i]).strip()
+        IPA = str(df['IPA'][i]).strip()
+        IPA_LIST = str(df['IPA_List'][i]).strip().split()
+        FREQcount = int(df['frequency'][i])
+        words.append(Words(WORD, IPA, IPA_LIST, FREQcount))
+
+
 def update_excel_with_ipa(words):
     df = pd.read_excel('words_giant.xlsx')
     ipa_column = [word.IPA for word in words]
     ipa_list_column = [','.join(word.IPA_LIST) for word in words] 
     length_column = [word.LENGTH for word in words]
-
-    df['IPA'] = ipa_column
-    df['IPA_LIST'] = ipa_list_column
+    df['NEW_IPA_LIST'] = ipa_list_column
     df['Word_Length'] = length_column
 
     df.to_excel('words_giant_updated.xlsx', index=False)  
 
 
 new_list = []
-add_words_to_list(new_list)
+add_words_to_list_from_file(new_list)
 update_ipa(new_list)
 get_length(new_list)
 update_excel_with_ipa(new_list)
