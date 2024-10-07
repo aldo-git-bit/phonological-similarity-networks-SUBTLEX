@@ -9,6 +9,7 @@ class Words:
         self.FREQ = FREQ
         self.NEW_IPA_LIST = ""
         self.LENGTH = ""
+        self.NEW_LENGTH = ""
 
 
 
@@ -38,13 +39,13 @@ def update_ipa(words):
                 temp_array_word.append(word_1[k-1] + word_1[k])
         
         words[i].NEW_IPA_LIST = temp_array_word
-
+        print(temp_array_word)
 
 
 def get_length(words):
     for i in range(0, len(words)):
+        words[i].NEW_LENGTH = len(words[i].NEW_IPA_LIST)
         words[i].LENGTH = len(words[i].IPA_LIST)
-
 
 def add_words_to_list_from_file(words):
     df = pd.read_excel('words_giant.xlsx')
@@ -58,12 +59,12 @@ def add_words_to_list_from_file(words):
 
 def update_excel_with_ipa(words):
     df = pd.read_excel('words_giant.xlsx')
-    ipa_column = [word.IPA for word in words]
-    ipa_list_column = [','.join(word.NEW_IPA_LIST) for word in words] 
+    ipa_list_column = [f"[{' '.join(word.NEW_IPA_LIST)}]" for word in words] 
     length_column = [word.LENGTH for word in words]
+    new_length_column = [word.NEW_LENGTH for word in words]
     df['NEW_IPA_LIST'] = ipa_list_column
     df['Word_Length'] = length_column
-
+    df['New_World_Length'] = new_length_column
     df.to_excel('words_giant_updated.xlsx', index=False)  
 
 
