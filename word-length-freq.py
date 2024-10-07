@@ -51,7 +51,7 @@ def add_words_to_list_from_file(words):
     for i in range(len(df['word'])):
         WORD = str(df['word'][i]).strip()
         IPA = str(df['IPA'][i]).strip()
-        IPA_LIST = str(df['IPA_List'][i]).strip().split()
+        IPA_LIST = str(df['IPA_LIST'][i]).strip().split()
         FREQcount = int(df['frequency'][i])
         words.append(Words(WORD, IPA, IPA_LIST, FREQcount))
 
